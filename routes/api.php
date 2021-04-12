@@ -14,7 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('login', 'API\Auth\LoginController@login');
+Route::post('/login', 'API\Auth\LoginController@login');
+
+Route::prefix('/admin')->group(function(){
+    Route::prefix('/mapel')->group(function(){
+        Route::post('/store', 'API\Admin\MapelController@store');
+    });
+});
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
