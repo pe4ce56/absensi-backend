@@ -25,3 +25,28 @@ function generateAPI(array $options = array())
         'lenght' => $lenght
     ], $code);
 }
+
+function generateAPIMessage(array $options = array(), $status = true)
+{
+    $defaults = array(
+        'context' => null,
+        'type' => 'read',
+        'id' => null,
+    );
+    $options = array_merge($defaults, $options);
+    extract($options);
+
+    switch($type){
+        case 'create':
+            return $status ? "Ambil data $context berhasil." : "Ambil data $context gagal.";
+        case 'read':
+            return $status ? "Tambah data $context berhasil." : "Tambah data $context gagal.";
+        case 'update':
+            return $status ? "Update data $context id $id berhasil." : "Data $context dengan id $id tidak ditemukan.";
+        case 'find' :
+            return $status ? "Ambil data $context dengan id $id berhasil." : "Data $context dengan id $id tidak ditemukan.";
+        case 'delete':
+            return $status ? "Hapus data $context dengan id $id berhasil." : "Data $context dengan id $id tidak ditemukan.";
+    }
+    
+}
