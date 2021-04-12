@@ -17,7 +17,9 @@ class CreateAbsensiTable extends Migration
             $table->increments('id');
             $table->integer('id_siswa')->unsigned();
             $table->foreign('id_siswa')->references('id')->on('siswa')->cascadeOnDelete();
-            $table->time('jam');
+            $table->integer('id_jadwal')->unsigned();
+            $table->foreign('id_jadwal')->references('id')->on('jadwal')->cascadeOnDelete();
+            $table->timestamp('jam');
             $table->string('lokasi');
             $table->timestamps();
         });
