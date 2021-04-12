@@ -17,7 +17,7 @@ class CreateGuruTable extends Migration
             $table->increments('id');
             $table->integer('id_user')->unsigned();
             $table->foreign('id_user')->references('id')->on('users')->cascadeOnDelete();
-            $table->string('NIP', 18);
+            $table->string('NIP', 18)->unique();
             $table->string('nama', 100);
             $table->enum('jk', ['l', 'p']);
             $table->integer('id_mapel')->unsigned();

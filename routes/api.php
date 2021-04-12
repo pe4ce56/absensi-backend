@@ -14,6 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('/login', 'API\Auth\LoginController@login');
+
+Route::prefix('/admin')->group(function(){
+    Route::prefix('/mapel')->group(function(){
+        Route::get('/', 'API\Admin\MapelController@read');
+        Route::get('/find/{id}', 'API\Admin\MapelController@find');
+        Route::post('/store', 'API\Admin\MapelController@store');
+        Route::put('/update/{id}', 'API\Admin\MapelController@update');
+        Route::delete('/delete/{id}', 'API\Admin\MapelController@delete');
+    });
 });
+
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
