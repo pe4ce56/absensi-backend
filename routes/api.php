@@ -18,7 +18,11 @@ Route::post('/login', 'API\Auth\LoginController@login');
 
 Route::prefix('/admin')->group(function(){
     Route::prefix('/mapel')->group(function(){
+        Route::get('/', 'API\Admin\MapelController@read');
+        Route::get('/find/{id}', 'API\Admin\MapelController@find');
         Route::post('/store', 'API\Admin\MapelController@store');
+        Route::put('/update/{id}', 'API\Admin\MapelController@update');
+        Route::delete('/delete/{id}', 'API\Admin\MapelController@delete');
     });
 });
 
