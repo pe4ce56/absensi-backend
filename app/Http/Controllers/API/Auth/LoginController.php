@@ -24,8 +24,9 @@ class LoginController extends Controller
                 
             }
             $success['token'] = $user->createToken('AbsensiApp')->accessToken;
-            return generateAPI(['message' => 'Login Sukses', 'data' => $success]);
+            return generateAPI(['message' => 'Login Sukses', 'data' => $success, 'status' => false]);
         }
+        return generateAPI(['message' => 'Harap periksa username dan password', 'code' => 403]);
     }
 
     public function logout(Request $request)
