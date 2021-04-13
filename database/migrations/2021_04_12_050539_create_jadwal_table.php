@@ -19,8 +19,8 @@ class CreateJadwalTable extends Migration
             $table->timestamp('waktu');
             $table->integer('id_kelas')->unsigned();
             $table->foreign('id_kelas')->references('id')->on('kelas')->cascadeOnDelete();
-            $table->integer('id_mapel')->unsigned();
-            $table->foreign('id_mapel')->references('id')->on('mapel')->cascadeOnDelete();
+            $table->integer('id_guru_mapel')->unsigned();
+            $table->foreign('id_guru_mapel')->references('id')->on('guru_mapel')->cascadeOnDelete();
             $table->timestamps();
         });
     }
