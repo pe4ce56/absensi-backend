@@ -13,14 +13,27 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('user', function (Blueprint $table) {
             $table->increments('id');
             $table->string('username')->unique();
             $table->string('password');
+            $table->string('foto_profil');
             $table->enum('role', ['admin', 'guru', 'siswa']);
             $table->rememberToken();
             $table->timestamps();
         });
+
+        /*
+        * For Default Admin Account
+        */
+        DB::table('user')->insert([
+            'username' => 'admin',
+            'password' => bcrypt('admin'),
+            'foto_profil' => 'default.jpg',
+            'role' => 'admin',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 
     /**
@@ -30,6 +43,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('user');
     }
 }

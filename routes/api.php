@@ -14,9 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/login', 'API\Auth\LoginController@login');
+Route::post('/login', 'API\Auth\LoginController@loginAsStudentAndTeacher');
 
 Route::prefix('/admin')->group(function(){
+    Route::post('/login', 'API\Auth\LoginController@loginAsAdmin');
+
     Route::prefix('/mapel')->group(function(){
         Route::get('/', 'API\Admin\MapelController@read');
         Route::get('/find/{id}', 'API\Admin\MapelController@find');

@@ -46,6 +46,21 @@ return [
             'provider' => 'users',
             // 'hash' => false,
         ],
+
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'users'
+        ],
+
+        'guru' => [
+            'driver' => 'session',
+            'provider' => 'users'
+        ],
+
+        'siswa' => [
+            'driver' => 'session',
+            'provider' => 'siswas'
+        ]
     ],
 
     /*
@@ -68,8 +83,13 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => App\Models\User::class,
         ],
+        
+        'siswas' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Siswa::class
+        ]
 
         // 'users' => [
         //     'driver' => 'database',
