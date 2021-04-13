@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \Auth;
 
-use App\Mapel;
+use App\Models\Mapel;
 
 class MapelController extends Controller
 {
@@ -15,6 +15,8 @@ class MapelController extends Controller
 
     public function __construct()
     {
+        $user = Auth::guard('guru')->user();
+        dd($user);
         $this->middleware(['auth:api', 'rolecheck:admin']);
     }
 
