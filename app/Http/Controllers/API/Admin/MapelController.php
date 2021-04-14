@@ -69,7 +69,10 @@ class MapelController extends Controller
     {
         $id = intval(preg_replace('/[\D]/', '', $id)) ?: null;
 
-        $mapelData = MapelRes::make(MapelModel::with('teachers')->findOrFail($id));
+        $mapelModel = MapelModel::with('teachers')->find($id);
+        if(!isset($mapelModel)) return generateAPI(['status' => false, 'code' => 404, 'message' => generateAPIMessage(['context' => self::$context, 'type' => 'find', 'id' => $id], false)]);
+
+        $mapelData = MapelRes::make($mapelModel);
         return generateAPI(['data' => $mapelData, 'message' => generateAPIMessage(['context' => Self::$context, 'type' => 'find', 'id' => $id])]);
     }
 
@@ -86,7 +89,9 @@ class MapelController extends Controller
         $validator = $this->term($request, $id);
         if($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
 
-        $mapelModel = MapelModel::findOrFail($id);
+        $mapelModel = MapelModel::find($id);
+        if(!isset($mapelModel)) return generateAPI(['status' => false, 'code' => 404, 'message' => generateAPIMessage(['context' => self::$context, 'type' => 'update', 'id' => $id], false)]);
+
         $mapelModel->nama = $request->mapel_name;
         $mapelModel->save();
 
