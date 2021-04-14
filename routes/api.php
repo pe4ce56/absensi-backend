@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', 'API\Auth\LoginController@loginAsStudentAndTeacher');
 
+Route::post('/logout', 'API\Auth\LoginController@logout');
+
 Route::prefix('/admin')->group(function(){
     Route::post('/login', 'API\Auth\LoginController@loginAsAdmin');
 

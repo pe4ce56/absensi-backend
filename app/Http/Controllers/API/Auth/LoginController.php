@@ -11,6 +11,11 @@ use App\Models\User;
 
 class LoginController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api')->only('logout');
+    }
+
     private function term($request)
     {
         $validator = Validator::make($request->all(), [
@@ -95,7 +100,7 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        $logout = Auth::user()->token()->revoke();
-        return response()->json(['Logout Sukses' => $logout], 200);
+        $request->user()->token()->revoke();
+        return generateAPI(['message' => 'Logout sukses']);
     }
 }
