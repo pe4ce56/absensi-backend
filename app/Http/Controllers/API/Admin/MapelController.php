@@ -2,82 +2,111 @@
 
 namespace App\Http\Controllers\API\Admin;
 
-use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use \Auth;
+use Illuminate\Support\Facades\Validator;
 
-use App\Models\Mapel;
+use App\Models\Mapel as MapelModel;
+use App\Http\Resources\MapelCollection as MapelRes;
 
 class MapelController extends Controller
 {
     private static $context = 'Mapel';
 
-    public function __construct()
+    function __construct()
     {
-        $user = Auth::guard('guru')->user();
-        dd($user);
         $this->middleware(['auth:api', 'rolecheck:admin']);
     }
 
+    /**
+     * For validation template
+     */
     private function term($request, $id = null)
     {
         $validator = Validator::make($request->all(), [
             'mapel_name' => ['required','max:100','unique:mapel,nama,'.$id.',id']
         ]);
-        
         return $validator;
     }
 
-    public function store(Request $request)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {   
-        $validator = $this->term($request);
+        $mapel = MapelRes::collection(MapelModel::with('teachers')->get());
+        // $mapel2 = MapelModel::paginate(3); Jaga Jaga buat pagination
+        return generateAPI(['data' => $mapel, 'custom_lenght' => count($mapel), 'message' => generateAPIMessage(['context' => Self::$context, 'type' => 'read'])]);
+    }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $validator = $this->term($request);
         if($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
 
-        $mapel = new Mapel;
-        $mapel->nama = $request->mapel_name;
-        $mapel->save();
-
-        return generateAPI(['status' => true, 'message' => generateAPIMessage(['context' => self::$context]), 'data' => $mapel]);
+        $mapelModel = new MapelModel;
+        $mapelModel->nama = $request->mapel_name;
+        $mapelModel->save();
+        
+        return generateAPI(['status' => true, 'message' => generateAPIMessage(['context' => self::$context, 'type' => 'create']), 'data' => $mapelModel]);
     }
 
-    public function read(Request $request)
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
-        return generateAPI(['message' => generateAPIMessage(['context' => self::$context]), 'data' => Mapel::get()]);
+        $id = intval(preg_replace('/[\D]/', '', $id)) ?: null;
+
+        $mapelData = MapelRes::make(MapelModel::with('teachers')->findOrFail($id));
+        return generateAPI(['data' => $mapelData, 'message' => generateAPIMessage(['context' => Self::$context, 'type' => 'find', 'id' => $id])]);
     }
 
-    public function find(Request $request, $id)
-    {
-        $id = intval(preg_replace('/[\D]/', '', $id));
-        $mapel = Mapel::where('id', $id)->first();
-
-        if($mapel) return generateAPI(['message' => generateAPIMessage(['context' => self::$context, 'type' => 'find', 'id' => $id]), 'data' => $mapel]);
-        return generateAPI(['message' => generateAPIMessage(['context' => self::$context, 'type' => 'find', 'id' => $id], false), 'code' => 404, 'status' => false]);
-    }
-
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
-        $id = intval(preg_replace('/[\D]/', '', $id));
-        $mapel = Mapel::where('id', $id)->first();
-        if(!$mapel) return generateAPI(['message' => generateAPIMessage(['context' => self::$context, 'type' => 'update', 'id' => $id], false), 'code' => 404, 'status' => false]);
-
+        $id = intval(preg_replace('/[\D]/', '', $id)) ?: null;
         $validator = $this->term($request, $id);
         if($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
 
-        $mapel->nama = $request->mapel_name;
-        $mapel->save();
-        
-        return generateAPI(['status' => true, 'message' => generateAPIMessage(['context' => self::$context, 'type' => 'update', 'id' => $id]), 'data' => $mapel]);
+        $mapelModel = MapelModel::findOrFail($id);
+        $mapelModel->nama = $request->mapel_name;
+        $mapelModel->save();
+
+        return generateAPI(['status' => true, 'message' => generateAPIMessage(['context' => self::$context, 'type' => 'update', 'id' => $id]), 'data' => $mapelModel]);
     }
 
-    public function delete(Request $request, $id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
     {
-        $id = intval(preg_replace('/[\D]/', '', $id));
-        $mapel = Mapel::where('id', $id)->first();
-        if(!$mapel) return generateAPI(['message' => generateAPIMessage(['context' => self::$context, 'type' => 'delete', 'id' => $id], false), 'code' => 404, 'status' => false]);
+        $id = intval(preg_replace('/[\D]/', '', $id)) ?: null;
+        
+        $mapelModel = MapelModel::find($id);
+        if(!isset($mapelModel)) return generateAPI(['status' => false, 'code' => 404, 'message' => generateAPIMessage(['context' => self::$context, 'type' => 'delete', 'id' => $id], false)]);
 
-        return generateAPI(['status' => true, 'message' => generateAPIMessage(['context' => self::$context, 'type' => 'delete', 'id' => $id]), 'data' => $mapel->delete()]);
+        $mapelModel->delete();
+        return generateAPI(['status' => true, 'message' => generateAPIMessage(['context' => self::$context, 'type' => 'delete', 'id' => $id])]);
     }
-
 }
