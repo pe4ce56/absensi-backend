@@ -7,6 +7,7 @@ function generateAPI(array $options = array())
         'message'    => '',
         'code'  => 200,
         'data'  => null,
+        'custom_lenght' => 0
     );
     $options = array_merge($defaults, $options);
     extract($options);
@@ -15,14 +16,16 @@ function generateAPI(array $options = array())
     else if(is_bool($data)) $data ? $lenght = 1 : $lenght = 0;
     else if(is_string($data)) $data == '' ? $lenght = 0 : $lenght = 1;
     else if(is_integer($data)) $data != 0 ? $lenght = 1 : $lenght = 0;
-    else $lenght = 0;
+    else $lenght = 1;
+
+    if($code === 404 || $code === 403 || $code === 500) $lenght = 0;
     
     return response()->json([
         'status' => $status,
         'code' => $code,
         'message' => $message,
         'data' => $data,
-        'lenght' => $lenght
+        'lenght' => $custom_lenght > 0 ? $custom_lenght : $lenght
     ], $code);
 }
 
@@ -37,9 +40,9 @@ function generateAPIMessage(array $options = array(), $status = true)
     extract($options);
 
     switch($type){
-        case 'create':
-            return $status ? "Ambil data $context berhasil." : "Ambil data $context gagal.";
         case 'read':
+            return $status ? "Ambil data $context berhasil." : "Ambil data $context gagal.";
+        case 'create':
             return $status ? "Tambah data $context berhasil." : "Tambah data $context gagal.";
         case 'update':
             return $status ? "Update data $context id $id berhasil." : "Data $context dengan id $id tidak ditemukan.";
