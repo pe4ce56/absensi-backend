@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use API\Admin\MapelController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,15 +21,5 @@ Route::post('/login', 'API\Auth\LoginController@loginAsStudentAndTeacher');
 Route::prefix('/admin')->group(function(){
     Route::post('/login', 'API\Auth\LoginController@loginAsAdmin');
 
-    Route::prefix('/mapel')->group(function(){
-        Route::get('/', 'API\Admin\MapelController@read');
-        Route::get('/find/{id}', 'API\Admin\MapelController@find');
-        Route::post('/store', 'API\Admin\MapelController@store');
-        Route::put('/update/{id}', 'API\Admin\MapelController@update');
-        Route::delete('/delete/{id}', 'API\Admin\MapelController@delete');
-    });
+    Route::apiResource('/mapel', MapelController::class);
 });
-
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
