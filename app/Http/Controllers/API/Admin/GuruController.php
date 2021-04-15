@@ -141,6 +141,8 @@ class GuruController extends Controller
         $guruModel->tanggal_lahir = $request->birth_date;
         $guruModel->user->save();
         $guruModel->save();
+
+        return generateAPI(['status' => true, 'message' => generateAPIMessage(['context' => self::$context, 'type' => 'update', 'id' => $id]), 'data' => $guruModel]);
     }
 
     /**
@@ -158,6 +160,7 @@ class GuruController extends Controller
 
         $guruModel->user->delete();
         $guruModel->delete();
+        
         return generateAPI(['status' => true, 'message' => generateAPIMessage(['context' => self::$context, 'type' => 'delete', 'id' => $id])]);
     }
 }
