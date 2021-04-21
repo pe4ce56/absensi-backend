@@ -18,7 +18,7 @@ class CreateSiswaTable extends Migration
             $table->increments('id');
             $table->integer('data_of')->unsigned();
             $table->foreign('data_of')->references('id')->on('user')->cascadeOnDelete();
-            $table->string('NISN', 10);
+            $table->string('NISN', 10)->unique();
             $table->string('nama', 100);
             $table->enum('jk', ['l', 'p']);
             $table->string('whatsapp', 15)->unique();
