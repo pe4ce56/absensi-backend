@@ -17,8 +17,7 @@ class KelasCollection extends JsonResource
         return[
             'id' => $this->id,
             'name' => $this->nama,
-            //sementara, ntar pake collection aja
-            'students' => $this->students,
+            'students' => SiswaCollection::collection($this->whenLoaded('students')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

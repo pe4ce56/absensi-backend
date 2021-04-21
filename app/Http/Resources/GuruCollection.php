@@ -24,7 +24,9 @@ class GuruCollection extends JsonResource
             'whatsapp' => $this->whatsapp,
             'address' => $this->alamat,
             'birth' => $this->tanggal_lahir,
-            'mapels' => MapelCollection::collection($this->whenLoaded('mapels'))
+            'mapels' => MapelCollection::collection($this->whenLoaded('mapels')),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
         ];
     }
 }

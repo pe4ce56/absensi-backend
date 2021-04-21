@@ -29,7 +29,7 @@ class GuruController extends Controller
          * @return null when $id is null
          * @return data_of
          */
-        $userId = isset($id) ? GuruModel::find($id)->data_of : null;
+        $userId = isset($id) ? (GuruModel::find($id)->data_of ?? null) : null;
 
         $validator = Validator::make($request->all(), [
             'username' => ['required','unique:user,username,'.$userId.',id', 
@@ -130,7 +130,7 @@ class GuruController extends Controller
         if(!isset($guruModel)) return generateAPI(['status' => false, 'code' => 404, 'message' => generateAPIMessage(['context' => self::$context, 'type' => 'update', 'id' => $id], false)]);
 
         $guruModel->user->username = $request->username;
-        $guruModel->user->password = $request->password;
+        $guruModel->user->password = bcrypt($request->password);
         $guruModel->user->foto_profil = $request->profile_pict ?? $guruModel->user->foto_profil;
 
         $guruModel->NIP = $request->nip;
