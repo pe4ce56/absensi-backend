@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use API\Admin\MapelController;
 use API\Admin\GuruController;
 use API\Admin\KelasController;
+use API\Admin\SiswaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,4 +27,5 @@ Route::prefix('/admin')->group(function(){
     Route::apiResource('/mapel', MapelController::class);
     Route::apiResource('/guru', GuruController::class);
     Route::apiResource('/kelas', KelasController::class);
+    Route::apiResource('/siswa', SiswaController::class);
 });
