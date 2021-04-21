@@ -33,7 +33,7 @@ class KelasController extends Controller
      */
     public function index()
     {
-        $kelas = KelasRes::collection(KelasModel::get());
+        $kelas = KelasRes::collection(KelasModel::with('students')->get());
         return generateAPI(['data' => $kelas, 'custom_lenght' => count($kelas), 'message' => generateAPIMessage(['context' => Self::$context, 'type' => 'read'])]);
     }
 
