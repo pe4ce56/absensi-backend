@@ -17,10 +17,10 @@ class GuruCollection extends JsonResource
         return [
             'id' => $this->id,
             'data_of' => $this->data_of,
-            'user' => new UserCollection($this->whenLoaded('user')),
+            'user' => $this->when($this->user, new UserCollection($this->user)),
             'NIP' => $this->NIP,
             'name' => $this->nama,
-            'sex' => $this->jk == 'l' ? 'Male' : 'Female',
+            'gender' => $this->jk == 'l' ? 'Male' : 'Female',
             'whatsapp' => $this->whatsapp,
             'address' => $this->alamat,
             'birth' => $this->tanggal_lahir,

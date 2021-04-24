@@ -44,7 +44,7 @@ class GuruController extends Controller
 
             'nip' => 'required|digits:18|unique:guru,NIP,'.$id.',id',
             'name' => 'required|max:100',
-            'sex' => 'required|in:m,f',
+            'gender' => 'required|in:m,f',
             'whatsapp' => 'required|max:15|unique:guru,whatsapp,'.$id.',id',
             'address' => 'required',
             'birth_date' => 'required|date'
@@ -85,7 +85,7 @@ class GuruController extends Controller
         $guruModel->data_of = $userModel->id;
         $guruModel->NIP = $request->nip;
         $guruModel->nama = $request->name;
-        $guruModel->jk = $request->sex == 'm' ? 'l' : 'p';
+        $guruModel->jk = $request->gender == 'm' ? 'l' : 'p';
         $guruModel->whatsapp = $request->whatsapp;
         $guruModel->alamat = $request->address;
         $guruModel->tanggal_lahir = $request->birth_date;
@@ -135,7 +135,7 @@ class GuruController extends Controller
 
         $guruModel->NIP = $request->nip;
         $guruModel->nama = $request->name;
-        $guruModel->jk = $request->sex == 'm' ? 'l' : 'p';
+        $guruModel->jk = $request->gender == 'm' ? 'l' : 'p';
         $guruModel->whatsapp = $request->whatsapp;
         $guruModel->alamat = $request->address;
         $guruModel->tanggal_lahir = $request->birth_date;
