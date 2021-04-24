@@ -39,7 +39,7 @@ class SiswaController extends Controller
 
             'nisn' => 'required|digits:10|unique:siswa,NISN,'.$id.',id',
             'name' => 'required|max:100',
-            'sex' => 'required|in:m,f',
+            'gender' => 'required|in:m,f',
             'whatsapp' => 'required|unique:siswa,whatsapp,'.$id.',id',
             'address' => 'required',
             'birth_date' => 'required|date',
@@ -82,7 +82,7 @@ class SiswaController extends Controller
         $siswaModel->data_of = $userModel->id;
         $siswaModel->NISN = $request->nisn;
         $siswaModel->nama = $request->name;
-        $siswaModel->jk = $request->sex == 'm' ? 'l' : 'p';
+        $siswaModel->jk = $request->gender == 'm' ? 'l' : 'p';
         $siswaModel->whatsapp = $request->whatsapp;
         $siswaModel->alamat = $request->address;
         $siswaModel->tanggal_lahir = $request->birth_date;
@@ -133,7 +133,7 @@ class SiswaController extends Controller
 
         $siswaModel->NISN = $request->nisn;
         $siswaModel->nama = $request->name;
-        $siswaModel->jk = $request->sex == 'm' ? 'l' : 'p';
+        $siswaModel->jk = $request->gender == 'm' ? 'l' : 'p';
         $siswaModel->whatsapp = $request->whatsapp;
         $siswaModel->alamat = $request->address;
         $siswaModel->tanggal_lahir = $request->birth_date;

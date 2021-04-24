@@ -20,7 +20,7 @@ class SiswaCollection extends JsonResource
             'user' => new UserCollection($this->whenLoaded('user')),
             'nisn' => $this->NISN,
             'name' => $this->nama,
-            'sex' => $this->jk == 'l' ? 'Male' : 'Female',
+            'gender' => $this->jk == 'l' ? 'Male' : 'Female',
             'whatsapp' => $this->whatsapp,
             'address' => $this->alamat,
             'birth_date' => $this->tanggal_lahir,
