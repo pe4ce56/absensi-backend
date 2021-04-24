@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class GuruCollection extends JsonResource
+class SiswaCollection extends JsonResource
 {
     /**
      * Transform the resource collection into an array.
@@ -17,14 +17,15 @@ class GuruCollection extends JsonResource
         return [
             'id' => $this->id,
             'data_of' => $this->data_of,
-            'user' => $this->when($this->user, new UserCollection($this->user)),
-            'NIP' => $this->NIP,
+            'user' => new UserCollection($this->whenLoaded('user')),
+            'nisn' => $this->NISN,
             'name' => $this->nama,
             'gender' => $this->jk == 'l' ? 'Male' : 'Female',
             'whatsapp' => $this->whatsapp,
             'address' => $this->alamat,
-            'birth' => $this->tanggal_lahir,
-            'mapels' => MapelCollection::collection($this->whenLoaded('mapels')),
+            'birth_date' => $this->tanggal_lahir,
+            'student_pict' => $this->foto_siswa,
+            'class' => new KelasCollection($this->whenLoaded('class')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

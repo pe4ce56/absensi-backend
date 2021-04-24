@@ -29,7 +29,7 @@ class GuruController extends Controller
          * @return null when $id is null
          * @return data_of
          */
-        $userId = isset($id) ? GuruModel::find($id)->data_of : null;
+        $userId = isset($id) ? (GuruModel::find($id)->data_of ?? null) : null;
 
         $validator = Validator::make($request->all(), [
             'username' => ['required','unique:user,username,'.$userId.',id', 
@@ -44,7 +44,7 @@ class GuruController extends Controller
 
             'nip' => 'required|digits:18|unique:guru,NIP,'.$id.',id',
             'name' => 'required|max:100',
-            'sex' => 'required|in:m,f',
+            'gender' => 'required|in:m,f',
             'whatsapp' => 'required|max:15|unique:guru,whatsapp,'.$id.',id',
             'address' => 'required',
             'birth_date' => 'required|date'
@@ -85,7 +85,7 @@ class GuruController extends Controller
         $guruModel->data_of = $userModel->id;
         $guruModel->NIP = $request->nip;
         $guruModel->nama = $request->name;
-        $guruModel->jk = $request->sex == 'm' ? 'l' : 'p';
+        $guruModel->jk = $request->gender == 'm' ? 'l' : 'p';
         $guruModel->whatsapp = $request->whatsapp;
         $guruModel->alamat = $request->address;
         $guruModel->tanggal_lahir = $request->birth_date;
@@ -130,17 +130,19 @@ class GuruController extends Controller
         if(!isset($guruModel)) return generateAPI(['status' => false, 'code' => 404, 'message' => generateAPIMessage(['context' => self::$context, 'type' => 'update', 'id' => $id], false)]);
 
         $guruModel->user->username = $request->username;
-        $guruModel->user->password = $request->password;
+        $guruModel->user->password = bcrypt($request->password);
         $guruModel->user->foto_profil = $request->profile_pict ?? $guruModel->user->foto_profil;
 
         $guruModel->NIP = $request->nip;
         $guruModel->nama = $request->name;
-        $guruModel->jk = $request->sex == 'm' ? 'l' : 'p';
+        $guruModel->jk = $request->gender == 'm' ? 'l' : 'p';
         $guruModel->whatsapp = $request->whatsapp;
         $guruModel->alamat = $request->address;
         $guruModel->tanggal_lahir = $request->birth_date;
         $guruModel->user->save();
         $guruModel->save();
+
+        return generateAPI(['status' => true, 'message' => generateAPIMessage(['context' => self::$context, 'type' => 'update', 'id' => $id]), 'data' => $guruModel]);
     }
 
     /**
@@ -158,6 +160,7 @@ class GuruController extends Controller
 
         $guruModel->user->delete();
         $guruModel->delete();
+        
         return generateAPI(['status' => true, 'message' => generateAPIMessage(['context' => self::$context, 'type' => 'delete', 'id' => $id])]);
     }
 }
