@@ -7,6 +7,7 @@ use API\Admin\MapelController;
 use API\Admin\GuruController;
 use API\Admin\KelasController;
 use API\Admin\SiswaController;
+use API\Admin\JadwalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,4 +29,5 @@ Route::prefix('/admin')->group(function(){
     Route::apiResource('/guru', GuruController::class);
     Route::apiResource('/kelas', KelasController::class);
     Route::apiResource('/siswa', SiswaController::class);
+    Route::apiResource('/jadwal', JadwalController::class);
 });
