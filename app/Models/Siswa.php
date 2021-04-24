@@ -12,5 +12,15 @@ class Siswa extends Authenticatable
     use HasApiTokens, Notifiable;
 
     protected $table = 'siswa';
-    protected $fillable = ['NISN', 'password', 'jk', 'whatsapp', 'alamat', 'id_kelas'];
+    protected $fillable = ['data_of', 'NISN', 'nama', 'jk', 'whatsapp', 'alamat', 'tanggal_lahir', 'foto_siswa', 'id_kelas'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'data_of');
+    }
+
+    public function class()
+    {
+        return $this->belongsTo(Kelas::class, 'id_kelas');
+    }
 }

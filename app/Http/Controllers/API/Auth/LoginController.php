@@ -11,6 +11,11 @@ use App\Models\User;
 
 class LoginController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api')->only('logout');
+    }
+
     private function term($request)
     {
         $validator = Validator::make($request->all(), [
@@ -38,7 +43,7 @@ class LoginController extends Controller
             $data['user'] = new \stdClass();
             $data['user']->id = $user->id;
             $data['user']->role = 'admin';
-            return generateAPI(['message' => 'Login Sukses', 'data' => $data, 'status' => false]);
+            return generateAPI(['message' => 'Login Sukses', 'data' => $data, 'status' => true]);
         }
     }
 
@@ -48,43 +53,54 @@ class LoginController extends Controller
         if($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
 
         $username = $request->username;
+
+        /*
+        * For array in Auth::attempt
+        * For all role is login is use username and password
+        * For student role username is NISN
+        */
+        $credentials = [
+            'username' => $username,
+            'password' => $request->password
+        ];
+
+        /*
+        * If username contains character except a number
+        * Then login as a Student
+        */
         if(!preg_match('/[\D]/', $username)){
-            $credentials = [
-                'NISN' => $username,
-                'password' => $request->password
-            ];
-            if(Auth::guard('siswa')->attempt($credentials)){
-                $user = Auth::guard('siswa')->user();
+            $credentials['role'] = 'siswa';
+            if(Auth::attempt($credentials)){
+                $user = Auth::user();
                 $data['token'] = $user->createToken('AsSiswa')->accessToken;
                 $data['user'] = new \stdClass();
                 $data['user']->id = $user->id;
                 $data['user']->role = 'siswa';
-                return generateAPI(['message' => 'Login Sukses', 'data' => $data, 'status' => false]);
+                return generateAPI(['message' => 'Login Sukses', 'data' => $data, 'status' => true]);
             }
-            return generateAPI(['message' => 'Harap periksa username dan password', 'code' => 403]);
-        }else{
-            $credentials = [
-                'username' => $username,
-                'password' => $request->password,
-                'role' => 'guru'
-            ];
-            if(Auth::guard('guru')->attempt($credentials)){
-                $user = Auth::guard('guru')->user();
+            return generateAPI(['message' => 'Harap periksa username dan password', 'code' => 403, 'status' => false]);
+        }
+        /*
+        * Else login as a Teacher
+        */
+        else{
+            $credentials['role'] = 'guru';
+            if(Auth::attempt($credentials)){
+                $user = Auth::user();
 
                 $data['token'] = $user->createToken('AsGuru')->accessToken;
                 $data['user'] = new \stdClass();
                 $data['user']->id = $user->id;
                 $data['user']->role = 'guru';
-                return generateAPI(['message' => 'Login Sukses', 'data' => $data, 'status' => false]);
+                return generateAPI(['message' => 'Login Sukses', 'data' => $data, 'status' => true]);
             }
-            return generateAPI(['message' => 'Harap periksa username dan password', 'code' => 403]);
         }
-        return generateAPI(['message' => 'Harap periksa username dan password', 'code' => 403]);
+        return generateAPI(['message' => 'Harap periksa username dan password', 'code' => 403, 'status' => false]);
     }
 
     public function logout(Request $request)
     {
-        $logout = Auth::user()->token()->revoke();
-        return response()->json(['Logout Sukses' => $logout], 200);
+        $request->user()->token()->revoke();
+        return generateAPI(['message' => 'Logout sukses']);
     }
 }
