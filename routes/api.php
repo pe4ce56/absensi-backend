@@ -33,3 +33,8 @@ Route::prefix('/admin')->group(function(){
     Route::apiResource('/siswa', SiswaController::class);
     Route::apiResource('/jadwal', JadwalController::class);
 });
+
+Route::prefix('/guru')->group(function(){
+    Route::get('/get-schedule', 'API\Guru\HomeController@getSchedule');
+    Route::get('/get-absent', 'API\Guru\HomeController@getAbsent');
+});
