@@ -21,8 +21,8 @@ class CreateAbsensiTable extends Migration
             $table->foreign('id_jadwal')->references('id')->on('jadwal')->cascadeOnDelete();
             $table->timestamp('waktu');
             $table->string('lokasi');
-            $table->string('keterangan');
-            $table->enum('status',['diterima, ditolak']);
+            $table->string('keterangan')->nullable();
+            $table->enum('status',['diterima, ditolak'])->nullable();
             $table->timestamps();
         });
     }
