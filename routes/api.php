@@ -41,3 +41,8 @@ Route::prefix('/guru')->group(function(){
     Route::get('/profile/{id}', 'API\Guru\ProfileController@getProfileDetails');
     Route::put('/profile/{id}', 'API\Guru\ProfileController@updateProfileDetails');
 });
+
+Route::prefix('/siswa')->group(function(){
+    Route::get('/get-schedule', 'API\Siswa\HomeController@getStudentSchedule');
+    Route::post('/absent', 'API\Siswa\HomeController@absent');
+});
