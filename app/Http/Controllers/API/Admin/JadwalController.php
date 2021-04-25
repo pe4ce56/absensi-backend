@@ -14,6 +14,11 @@ class JadwalController extends Controller
 {
     private static $context = 'Jadwal';
 
+    function __construct()
+    {
+        $this->middleware(['auth:api', 'rolecheck:admin']);
+    }
+
     private function term($request, int $id = null)
     {
         $validator = Validator::make($request->all(), [

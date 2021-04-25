@@ -29,4 +29,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function teacher()
+    {
+        return $this->hasOne(Guru::class, 'data_of');
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Siswa::class, 'data_of');
+    }
 }
