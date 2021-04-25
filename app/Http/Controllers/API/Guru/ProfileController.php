@@ -41,12 +41,12 @@ class ProfileController extends Controller
             'password_conf' => 'required|same:password',
             'profile_pict' => 'image',
 
-            'nip' => 'required|digits:18|unique:guru,NIP,'.$id.',id',
-            'name' => 'required|max:100',
-            'gender' => 'required|in:m,f',
-            'whatsapp' => 'required|max:15|unique:guru,whatsapp,'.$id.',id',
-            'address' => 'required',
-            'birth_date' => 'required|date'
+            // 'nip' => 'required|digits:18|unique:guru,NIP,'.$id.',id',
+            // 'name' => 'required|max:100',
+            // 'gender' => 'required|in:m,f',
+            // 'whatsapp' => 'required|max:15|unique:guru,whatsapp,'.$id.',id',
+            // 'address' => 'required',
+            // 'birth_date' => 'required|date'
         ]);
         return $validator;
     }
@@ -75,15 +75,7 @@ class ProfileController extends Controller
         $guruModel->user->username = $request->username;
         $guruModel->user->password = bcrypt($request->password);
         $guruModel->user->foto_profil = $request->profile_pict ?? $guruModel->user->foto_profil;
-
-        $guruModel->NIP = $request->nip;
-        $guruModel->nama = $request->name;
-        $guruModel->jk = $request->gender == 'm' ? 'l' : 'p';
-        $guruModel->whatsapp = $request->whatsapp;
-        $guruModel->alamat = $request->address;
-        $guruModel->tanggal_lahir = $request->birth_date;
         $guruModel->user->save();
-        $guruModel->save();
 
         return generateAPI(['status' => true, 'message' => generateAPIMessage(['context' => 'edit profile guru', 'type' => 'update', 'id' => $id]), 'data' => $guruModel]);
     }
