@@ -37,4 +37,7 @@ Route::prefix('/admin')->group(function(){
 Route::prefix('/guru')->group(function(){
     Route::get('/get-schedule', 'API\Guru\HomeController@getSchedule');
     Route::get('/get-absent', 'API\Guru\HomeController@getAbsent');
+
+    Route::get('/profile/{id}', 'API\Guru\ProfileController@getProfileDetails');
+    Route::put('/profile/{id}', 'API\Guru\ProfileController@updateProfileDetails');
 });
