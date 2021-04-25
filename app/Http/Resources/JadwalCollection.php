@@ -46,11 +46,9 @@ class JadwalCollection extends JsonResource
                 'day' => ucfirst($this->hari),
                 'time' => $this->waktu,
                 'class' => new KelasCollection($this->whenLoaded('class')),
-                $this->mergeWhen($role === 'admin', [
-                    'teacher' => new GuruCollection($this->whenPivotLoadedAs('teacher_mapel', 'guru_mapel', function(){
-                        return $this->teacher_mapel->teacher;
-                    })),
-                ]),
+                'teacher' => new GuruCollection($this->whenPivotLoadedAs('teacher_mapel', 'guru_mapel', function(){
+                    return $this->teacher_mapel->teacher;
+                })),
                 'mapel' => new MapelCollection($this->whenPivotLoadedAs('teacher_mapel', 'guru_mapel', function(){
                     return $this->teacher_mapel->mapel;
                 })),
