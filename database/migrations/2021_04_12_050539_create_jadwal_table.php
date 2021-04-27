@@ -15,8 +15,8 @@ class CreateJadwalTable extends Migration
     {
         Schema::create('jadwal', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('hari', ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu']);
-            $table->timestamp('waktu');
+            $table->enum('hari', [0,1,2,3,4,5,6])->comment('Hari dimulai dari 0: Minggu sampai 6: Sabtu');
+            $table->time('tanggal', 0)->comment("Waktu jadwal pelajaran (Jam)");
             $table->integer('id_kelas')->unsigned();
             $table->foreign('id_kelas')->references('id')->on('kelas')->cascadeOnDelete();
             $table->integer('id_guru_mapel')->unsigned();

@@ -19,21 +19,24 @@ class CreateSiswaTable extends Migration
             $table->integer('data_of')->unsigned();
             $table->foreign('data_of')->references('id')->on('user')->cascadeOnDelete();
             $table->string('NISN', 10)->unique();
-            $table->string('nama', 100);
+            $table->string('nama', 50);
             $table->enum('jk', ['l', 'p']);
             $table->string('whatsapp', 15)->unique();
             $table->text('alamat');
             $table->date('tanggal_lahir');
-            $table->string('foto_siswa');
+            $table->string('foto_siswa')->default('siswa-default.jpg')->nullable();
             $table->integer('id_kelas')->unsigned();
             $table->foreign('id_kelas')->references('id')->on('kelas')->cascadeOnDelete();
             $table->timestamps();
         });
 
+        /**
+         * Default data Siswa
+         */
+        $NISN = '0011223344';
         $userId = DB::table('user')->insertGetId([
-            'username' => '0011223344',
+            'username' => $NISN,
             'password' => bcrypt('siswa'),
-            'foto_profil' => 'default.jpg',
             'role' => 'siswa',
             'created_at' => now(),
             'updated_at' => now()
@@ -41,13 +44,12 @@ class CreateSiswaTable extends Migration
 
         DB::table('siswa')->insert([
             'data_of' => $userId,
-            'NISN' => '0011223344',
-            'nama' => 'Burhan',
+            'NISN' => $NISN,
+            'nama' => 'Burhan Udin Samson',
             'jk' => 'l',
             'whatsapp' => '+6267988277683',
             'alamat' => 'singosari',
-            'tanggal_lahir' => Carbon::now()->format('Y-m-d'),
-            'foto_siswa' => 'siswa.jpg',
+            'tanggal_lahir' => Carbon::now()->subYears(10)->format('Y-m-d'),
             'id_kelas' => 1,
             'created_at' => now(),
             'updated_at' => now()

@@ -19,10 +19,10 @@ class CreateAbsensiTable extends Migration
             $table->foreign('id_siswa')->references('id')->on('siswa')->cascadeOnDelete();
             $table->integer('id_jadwal')->unsigned();
             $table->foreign('id_jadwal')->references('id')->on('jadwal')->cascadeOnDelete();
-            $table->timestamp('waktu');
-            $table->string('lokasi');
-            $table->string('keterangan')->nullable();
-            $table->enum('status',['diterima, ditolak'])->nullable();
+            $table->time('waktu', 0)->comment('Waktu absensi siswa (Jam)');
+            $table->string('lokasi')->comment('Lokasi koordinat google maps contoh: 3.900736,23.56036');
+            $table->string('keterangan')->nullable()->comment('Keterangan jika siswa melakukan izin');
+            $table->enum('status', ['s', 'i', 'a'])->nullable();
             $table->timestamps();
         });
     }

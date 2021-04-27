@@ -15,12 +15,14 @@ class CreateKelasTable extends Migration
     {
         Schema::create('kelas', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nama', 100)->unique();
+            $table->string('nama', 50)->unique();
             $table->timestamps();
         });
 
+        /**
+         * Default kelas data
+         */
         DB::table('kelas')->insert([
-            'id' => 1,
             'nama' => 'XII RPL 1',
             'created_at' => now(),
             'updated_at' => now()

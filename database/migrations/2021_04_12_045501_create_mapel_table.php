@@ -15,9 +15,23 @@ class CreateMapelTable extends Migration
     {
         Schema::create('mapel', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nama', 100)->unique();
+            $table->string('nama', 50)->unique();
             $table->timestamps();
         });
+
+        /**
+         * Default mapel data
+         */
+        DB::table('mapel')->insert([
+            'nama' => 'Bahasa Indonesia',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('mapel')->insert([
+            'nama' => 'Bahasa Inggris',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
 
     /**
