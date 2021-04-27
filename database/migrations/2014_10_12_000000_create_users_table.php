@@ -15,10 +15,10 @@ class CreateUsersTable extends Migration
     {
         Schema::create('user', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('username')->unique();
+            $table->string('username')->unique()->comment('Username untuk Guru menggunakan NIP/Kode guru, untuk Siswa menggunakan NISN');
             $table->string('password');
-            $table->string('foto_profil');
-            $table->enum('role', ['admin', 'guru', 'siswa']);
+            $table->string('foto_profil')->default('default.jpg')->nullable();
+            $table->enum('role', ['admin', 'operator', 'guru', 'siswa']);
             $table->rememberToken();
             $table->timestamps();
         });
@@ -29,8 +29,18 @@ class CreateUsersTable extends Migration
         DB::table('user')->insert([
             'username' => 'admin',
             'password' => bcrypt('admin'),
-            'foto_profil' => 'default.jpg',
             'role' => 'admin',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        /**
+         * Default Operator account
+         */
+        DB::table('user')->insert([
+            'username' => 'operator',
+            'password' => bcrypt('operator'),
+            'role' => 'operator',
             'created_at' => now(),
             'updated_at' => now()
         ]);
