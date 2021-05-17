@@ -2,10 +2,12 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Absensi;
 use Illuminate\Http\Resources\Json\JsonResource;
 use \Auth;
 
 use App\Models\Guru as GuruModel;
+use App\Models\Jadwal;
 
 class AbsensiCollection extends JsonResource
 {
@@ -17,16 +19,33 @@ class AbsensiCollection extends JsonResource
      */
     public function toArray($request)
     {
-        $guruId = GuruModel::where('data_of', Auth::user()->id)->first()->id;
+        $role = Auth::user()->role;
+        if ($role === 'guru') {
 
-        if($this->schedule->teacher_mapel->teacher->id === $guruId){
+            $guruId = GuruModel::where('data_of', Auth::user()->id)->first()->id;
+
+            if ($this->schedule->teacher_mapel->teacher->id === $guruId) {
+                return [
+                    'student' => new SiswaCollection($this->whenLoaded('student')),
+                    'schedule' => new JadwalCollection($this->whenLoaded('schedule')),
+                    'time' => $this->waktu,
+                    'location' => $this->lokasi,
+                    'notes' => $this->keterangan,
+                    'status' => $this->status
+                ];
+            }
+        } else {
             return [
-                'student' => new SiswaCollection($this->whenLoaded('student')),
-                'schedule' => new JadwalCollection($this->whenLoaded('schedule')),
+                'id' => $this->id,
+                'day' => ucfirst($this->hari),
                 'time' => $this->waktu,
-                'location' => $this->lokasi,
-                'notes' => $this->keterangan,
-                'status' => $this->status
+                'teacher' => new GuruCollection($this->whenPivotLoadedAs('teacher_mapel', 'guru_mapel', function () {
+                    return $this->teacher_mapel->teacher;
+                })),
+                'mapel' => new MapelCollection($this->whenPivotLoadedAs('teacher_mapel', 'guru_mapel', function () {
+                    return $this->teacher_mapel->mapel;
+                })),
+                'absented' => $this->absent,
             ];
         }
     }
