@@ -13,6 +13,7 @@ use App\Models\Absensi as AbsensiModel;
 
 use App\Http\Resources\JadwalCollection as JadwalRes;
 use App\Http\Resources\AbsensiCollection as AbsensiRes;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -21,9 +22,10 @@ class HomeController extends Controller
         $this->middleware(['auth:api', 'rolecheck:guru']);
     }
 
-    public function getAbsent(Request $request)
-    {   
-        $absentData = AbsensiRes::collection(AbsensiModel::with(['schedule', 'schedule.teacher_mapel.teacher', 'student'])->get());
+    public function getAbsent(Request $request, $date)
+    {
+        $absentData = AbsensiRes::collection(AbsensiModel::with(['schedule', 'schedule.teacher_mapel.teacher', 'student'])
+            ->whereDate('created_at', Carbon::createFromFormat('m-d-Y', $date)->toDateString())->get());
 
         /**
          * I use another instance of laravel collection is for remove(filter)
@@ -33,7 +35,7 @@ class HomeController extends Controller
 
         return generateAPI(['data' => $tempData, 'custom_lenght' => count($tempData), 'message' => generateAPIMessage(['context' => 'jadwal guru', 'type' => 'read'])]);
     }
-    
+
     public function getSchedule(Request $request)
     {
         /**
@@ -49,7 +51,7 @@ class HomeController extends Controller
          * Same with above
          */
         $tempData = collect($jadwalData)->filter();
-        
+
         return generateAPI(['data' => $tempData, 'custom_lenght' => count($tempData), 'message' => generateAPIMessage(['context' => 'jadwal guru', 'type' => 'read'])]);
     }
 }
