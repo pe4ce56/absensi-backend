@@ -19,37 +19,37 @@ class JadwalCollection extends JsonResource
     public function toArray($request)
     {
         $role = Auth::user()->role;
-        
-        if($role === 'guru'){
+
+        if ($role === 'guru') {
             $guruId = GuruModel::where('data_of', Auth::user()->id)->first()->id;
-            if($this->teacher_mapel->teacher->id === $guruId){
+            if ($this->teacher_mapel->teacher->id === $guruId) {
                 return [
                     'id' => $this->id,
                     'day' => ucfirst($this->hari),
                     'time' => $this->waktu,
                     'class' => new KelasCollection($this->whenLoaded('class')),
                     $this->mergeWhen($role === 'admin', [
-                        'teacher' => new GuruCollection($this->whenPivotLoadedAs('teacher_mapel', 'guru_mapel', function(){
+                        'teacher' => new GuruCollection($this->whenPivotLoadedAs('teacher_mapel', 'guru_mapel', function () {
                             return $this->teacher_mapel->teacher;
                         })),
                     ]),
-                    'mapel' => new MapelCollection($this->whenPivotLoadedAs('teacher_mapel', 'guru_mapel', function(){
+                    'mapel' => new MapelCollection($this->whenPivotLoadedAs('teacher_mapel', 'guru_mapel', function () {
                         return $this->teacher_mapel->mapel;
                     })),
                     'created_at' => $this->created_at,
                     'updated_at' => $this->updated_at
                 ];
             }
-        }else{
+        } else {
             return [
                 'id' => $this->id,
                 'day' => ucfirst($this->hari),
                 'time' => $this->waktu,
                 'class' => new KelasCollection($this->whenLoaded('class')),
-                'teacher' => new GuruCollection($this->whenPivotLoadedAs('teacher_mapel', 'guru_mapel', function(){
+                'teacher' => new GuruCollection($this->whenPivotLoadedAs('teacher_mapel', 'guru_mapel', function () {
                     return $this->teacher_mapel->teacher;
                 })),
-                'mapel' => new MapelCollection($this->whenPivotLoadedAs('teacher_mapel', 'guru_mapel', function(){
+                'mapel' => new MapelCollection($this->whenPivotLoadedAs('teacher_mapel', 'guru_mapel', function () {
                     return $this->teacher_mapel->mapel;
                 })),
                 'created_at' => $this->created_at,
@@ -58,4 +58,3 @@ class JadwalCollection extends JsonResource
         }
     }
 }
- 

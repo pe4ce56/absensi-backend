@@ -20,12 +20,14 @@ use API\Admin\JadwalController;
 |
 */
 
+
 Route::post('/login', 'API\Auth\LoginController@loginProcess');
 
 Route::post('/logout', 'API\Auth\LoginController@logout');
 
 Route::prefix('/admin')->group(function(){
     Route::post('/login', 'API\Auth\LoginController@loginProcess');
+    Route::get('/accessDenied', 'API\Auth\LoginController@accessDenied')->name('accessDenied');
 
     Route::apiResource('/mapel', MapelController::class);
     Route::apiResource('/guru', GuruController::class);
@@ -34,7 +36,7 @@ Route::prefix('/admin')->group(function(){
     Route::apiResource('/jadwal', JadwalController::class);
 });
 
-Route::prefix('/guru')->group(function(){
+Route::prefix('/guru')->group(function () {
     Route::get('/get-schedule', 'API\Guru\HomeController@getSchedule');
     Route::get('/get-absent', 'API\Guru\HomeController@getAbsent');
 
@@ -42,7 +44,13 @@ Route::prefix('/guru')->group(function(){
     Route::put('/profile/{id}', 'API\Guru\ProfileController@updateProfileDetails');
 });
 
-Route::prefix('/siswa')->group(function(){
-    Route::get('/get-schedule', 'API\Siswa\HomeController@getStudentSchedule');
+Route::prefix('/siswa')->group(function () {
+    Route::get('/absent', 'API\Siswa\HomeController@getAbsent');
+    Route::get('/get-absent-by-schedule/{id_schedule}', 'API\Siswa\HomeController@getAbsentBySchedule');
     Route::post('/absent', 'API\Siswa\HomeController@absent');
+
+    Route::get('/get-schedule', 'API\Siswa\HomeController@getSchedule');
+    Route::get('/get-schedule-by-day/{day}', 'API\Siswa\HomeController@getScheduleByDay');
+
+    Route::get('/profile', 'API\Siswa\HomeController@getProfile');
 });

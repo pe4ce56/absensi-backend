@@ -18,4 +18,9 @@ class Jadwal extends Model
     {
         return $this->belongsTo(Guru_Mapel::class, 'id_guru_mapel');
     }
+
+    public function absent()
+    {
+        return $this->hasOne(Absensi::class, 'id_jadwal', 'id');
+    }
 }

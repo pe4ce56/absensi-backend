@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Auth;
 
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use App\Models\Siswa;
 use Illuminate\Http\Request;
 use \Auth;
 
@@ -16,13 +17,18 @@ class LoginController extends Controller
         $this->middleware('auth:api')->only('logout');
     }
 
+    public function accessDenied()
+    {
+        return generateAPI(['code' => 403, 'message' => 'Akses ditolak.']);
+    }
+
     private function term($request)
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required',
             'password' => 'required'
         ]);
-        
+
         return $validator;
     }
 
@@ -30,7 +36,7 @@ class LoginController extends Controller
     public function loginAsAdmin(Request $request)
     {
         $validator = $this->term($request);
-        if($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
+        if ($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
 
         $credentials = [
             'username' => $request->username,
@@ -38,7 +44,7 @@ class LoginController extends Controller
             'role' => 'admin'
         ];
 
-        if(Auth::attempt($credentials)){
+        if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $data['token'] = $user->createToken('AsAdmin')->accessToken;
             $data['user'] = new \stdClass();
@@ -52,7 +58,7 @@ class LoginController extends Controller
     public function loginProcess(Request $request)
     {
         $validator = $this->term($request);
-        if($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
+        if ($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
 
         $username = $request->username;
 
@@ -67,7 +73,6 @@ class LoginController extends Controller
             'username' => $username,
             'password' => $request->password
         ];
-
 
         if(Auth::attempt($credentials)){
             $user = Auth::user();
