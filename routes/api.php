@@ -20,12 +20,14 @@ use API\Admin\JadwalController;
 |
 */
 
-Route::post('/login', 'API\Auth\LoginController@loginAsStudentAndTeacher');
-Route::get('/accessDenied', 'API\Auth\LoginController@accessDenied')->name('accessDenied');
+
+Route::post('/login', 'API\Auth\LoginController@loginProcess');
+
 Route::post('/logout', 'API\Auth\LoginController@logout');
 
-Route::prefix('/admin')->group(function () {
-    Route::post('/login', 'API\Auth\LoginController@loginAsAdmin');
+Route::prefix('/admin')->group(function(){
+    Route::post('/login', 'API\Auth\LoginController@loginProcess');
+    Route::get('/accessDenied', 'API\Auth\LoginController@accessDenied')->name('accessDenied');
 
     Route::apiResource('/mapel', MapelController::class);
     Route::apiResource('/guru', GuruController::class);
