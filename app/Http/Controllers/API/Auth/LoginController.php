@@ -32,6 +32,7 @@ class LoginController extends Controller
         return $validator;
     }
 
+    /*
     public function loginAsAdmin(Request $request)
     {
         $validator = $this->term($request);
@@ -52,8 +53,9 @@ class LoginController extends Controller
             return generateAPI(['message' => 'Login Sukses', 'data' => $data, 'status' => true]);
         }
     }
+    */
 
-    public function loginAsStudentAndTeacher(Request $request)
+    public function loginProcess(Request $request)
     {
         $validator = $this->term($request);
         if ($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
@@ -62,47 +64,33 @@ class LoginController extends Controller
 
         /*
         * For array in Auth::attempt
-        * For all role is login is use username and password
+        * For role admin and worker is login is use username and password
         * For student role username is NISN
+        * For teacher role username is NIP
+        * For teacher tidak tetap username is Teacher Code
         */
         $credentials = [
             'username' => $username,
             'password' => $request->password
         ];
 
-        /*
-        * If username contains character except a number
-        * Then login as a Student
-        */
-        if (!preg_match('/[\D]/', $username)) {
-            $credentials['role'] = 'siswa';
-            if (Auth::attempt($credentials)) {
-                $user = Auth::user();
+        if(Auth::attempt($credentials)){
+            $user = Auth::user();
+            $role = $user->role;
 
-                $data['token'] = $user->createToken('AsSiswa')->accessToken;
-                $data['user'] = new \stdClass();
-                $data['user']->id = $user->id;
-                $data['user']->kelas = Siswa::with('class')->where('data_of', $user->id)->first()->class;
-                $data['user']->role = 'siswa';
-                return generateAPI(['message' => 'Login Sukses', 'data' => $data, 'status' => true]);
-            }
-            return generateAPI(['message' => 'Harap periksa username dan password', 'code' => 403, 'status' => false]);
-        }
-        /*
-        * Else login as a Teacher
-        */ else {
-            $credentials['role'] = 'guru';
-            if (Auth::attempt($credentials)) {
-                $user = Auth::user();
+            /**
+             * Create token initializator with AsRole
+             */
+            $data['token'] = $user->createToken('As' . ucfirst($role))->accessToken;
+            $data['user'] = new \stdClass();
+            $data['user']->id = $user->id;
+            $data['user']->role = $role;
+            $data['user']->username = $user->username;
+            $data['user']->profile_pict = $user->foto_profil;
 
-                $data['token'] = $user->createToken('AsGuru')->accessToken;
-                $data['user'] = new \stdClass();
-                $data['user']->id = $user->id;
-                $data['user']->role = 'guru';
-                return generateAPI(['message' => 'Login Sukses', 'data' => $data, 'status' => true]);
-            }
-            return generateAPI(['message' => 'Harap periksa username dan password', 'code' => 403, 'status' => false]);
+            return generateAPI(['message' => 'Login Sukses', 'data' => $data, 'status' => true]);
         }
+        return generateAPI(['message' => 'Harap periksa username dan password', 'code' => 403, 'status' => false]);
     }
 
     public function logout(Request $request)
