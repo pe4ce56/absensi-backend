@@ -19,6 +19,7 @@ use PhpParser\Node\Stmt\Global_;
 class HomeController extends Controller
 {
     public  $id_schedule;
+    public $day;
 
     public function __construct()
     {
@@ -26,18 +27,50 @@ class HomeController extends Controller
     }
 
 
-
-    public function getStudentSchedule(Request $request)
+    public function getProfile()
     {
+
         $dataOf = Auth::user()->id;
 
-        $siswaModel = SiswaModel::with(['class', 'class.schedule', 'class.schedule.teacher_mapel.teacher', 'class.schedule.teacher_mapel.mapel'])->where('data_of', $dataOf)->first();
-        $scheduleData = JadwalRes::collection($siswaModel->class->schedule);
+        $student = SiswaModel::with('class')->where('data_of', $dataOf)->first();
+        return generateAPI(['data' => $student, generateAPIMessage(['context' => 'jadwal siswa', 'type' => 'find', 'id' => $dataOf])]);
+    }
+
+    public function getSchedule()
+    {
+        $dataOf = Auth::user()->id;
+        $data = [];
+        $days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        for ($day = 0; $day < 7; $day++) {
+            $this->day = $day;
+            $siswaModel = SiswaModel::with(
+                ['class', 'class.schedule.teacher_mapel.teacher', 'class.schedule.teacher_mapel.mapel']
+            )->with(['class.schedule' => function ($q) {
+                $q->where('hari', $this->day + 1)->orderBy('waktu');
+            }])->where('data_of', $dataOf)->first();
+            if ($siswaModel)
+                $data[$days[$this->day]] = JadwalRes::collection($siswaModel->class->schedule);
+        }
+
+        return generateAPI(['data' => $data, 'message' => generateAPIMessage(['context' => 'jadwal siswa', 'type' => 'find', 'id' => $dataOf])]);
+    }
+
+    public function getScheduleByDay(Request $request, $day)
+    {
+        $this->day = $day;
+        $dataOf = Auth::user()->id;
+
+        $siswaModel = SiswaModel::with(
+            ['class', 'class.schedule.teacher_mapel.teacher', 'class.schedule.teacher_mapel.mapel']
+        )->with(['class.schedule' => function ($q) {
+            $q->where('hari',  $this->day)->orderBy('waktu');;
+        }])->where('data_of', $dataOf)->first();
+        $scheduleData = [];
+        if ($siswaModel)
+            $scheduleData = JadwalRes::collection($siswaModel->class->schedule);
 
         return generateAPI(['data' => $scheduleData, 'message' => generateAPIMessage(['context' => 'jadwal siswa', 'type' => 'find', 'id' => $dataOf])]);
     }
-
-
 
     public function getAbsent()
     {
@@ -48,7 +81,7 @@ class HomeController extends Controller
                 $q->whereDate('created_at',  Carbon::today()->toDateString());
             }])
             ->with(['class.schedule' => function ($q) {
-                $q->where('hari',  date('N'));
+                $q->where('hari',  date('N'))->orderBy('waktu');
             }])
 
             ->where('data_of', $dataOf)
@@ -57,6 +90,7 @@ class HomeController extends Controller
         $absentData = AbsentRes::collection($siswaModel->class->schedule);
         return generateAPI(['data' => $absentData, 'message' => generateAPIMessage(['context' => 'absensi siswa', 'type' => 'find', 'id' => $dataOf])]);
     }
+
     public function getAbsentBySchedule(Request $request, $id_schedule)
     {
         $this->id_schedule = $id_schedule;

@@ -45,6 +45,10 @@ Route::prefix('/guru')->group(function () {
 Route::prefix('/siswa')->group(function () {
     Route::get('/absent', 'API\Siswa\HomeController@getAbsent');
     Route::get('/get-absent-by-schedule/{id_schedule}', 'API\Siswa\HomeController@getAbsentBySchedule');
-    Route::get('/get-schedule', 'API\Siswa\HomeController@getStudentSchedule');
     Route::post('/absent', 'API\Siswa\HomeController@absent');
+
+    Route::get('/get-schedule', 'API\Siswa\HomeController@getSchedule');
+    Route::get('/get-schedule-by-day/{day}', 'API\Siswa\HomeController@getScheduleByDay');
+
+    Route::get('/profile', 'API\Siswa\HomeController@getProfile');
 });

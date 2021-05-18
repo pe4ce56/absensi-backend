@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Auth;
 
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use App\Models\Siswa;
 use Illuminate\Http\Request;
 use \Auth;
 
@@ -77,9 +78,11 @@ class LoginController extends Controller
             $credentials['role'] = 'siswa';
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
+
                 $data['token'] = $user->createToken('AsSiswa')->accessToken;
                 $data['user'] = new \stdClass();
                 $data['user']->id = $user->id;
+                $data['user']->kelas = Siswa::with('class')->where('data_of', $user->id)->first()->class;
                 $data['user']->role = 'siswa';
                 return generateAPI(['message' => 'Login Sukses', 'data' => $data, 'status' => true]);
             }
@@ -98,8 +101,8 @@ class LoginController extends Controller
                 $data['user']->role = 'guru';
                 return generateAPI(['message' => 'Login Sukses', 'data' => $data, 'status' => true]);
             }
+            return generateAPI(['message' => 'Harap periksa username dan password', 'code' => 403, 'status' => false]);
         }
-        return generateAPI(['message' => 'Harap periksa username dan password', 'code' => 403, 'status' => false]);
     }
 
     public function logout(Request $request)
