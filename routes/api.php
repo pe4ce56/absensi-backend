@@ -20,12 +20,12 @@ use API\Admin\JadwalController;
 |
 */
 
-Route::post('/login', 'API\Auth\LoginController@loginAsStudentAndTeacher');
+Route::post('/login', 'API\Auth\LoginController@loginProcess');
 
 Route::post('/logout', 'API\Auth\LoginController@logout');
 
 Route::prefix('/admin')->group(function(){
-    Route::post('/login', 'API\Auth\LoginController@loginAsAdmin');
+    Route::post('/login', 'API\Auth\LoginController@loginProcess');
 
     Route::apiResource('/mapel', MapelController::class);
     Route::apiResource('/guru', GuruController::class);
