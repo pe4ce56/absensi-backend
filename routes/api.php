@@ -40,10 +40,10 @@ Route::prefix('/guru')->group(function () {
     Route::get('/get-schedule', 'API\Guru\HomeController@getSchedule');
     Route::get('/get-schedule-by-day/{day}', 'API\Guru\HomeController@getScheduleByDay');
 
-    Route::get('/get-absent/{date}', 'API\Guru\HomeController@getAbsent');
-    Route::get('/get-absent-student-list/{id_schedule}/{date}', 'API\Guru\HomeController@getAbsentStudentList');
-
     Route::get('/get-absent-schedule/{date}', 'API\Guru\HomeController@getScheduleByDate');
+    Route::get('/get-absent/{date}', 'API\Guru\HomeController@getAbsent');
+    Route::get('/get-absent-student-list/{id_kelas}/{id_schedule}/{date}', 'API\Guru\HomeController@getCountStudentAbsent');
+
 
     Route::get('/profile/{id}', 'API\Guru\ProfileController@getProfileDetails');
     Route::put('/profile/{id}', 'API\Guru\ProfileController@updateProfileDetails');
