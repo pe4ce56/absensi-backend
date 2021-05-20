@@ -14,6 +14,7 @@ use App\Models\Absensi as AbsensiModel;
 use App\Http\Resources\JadwalCollection as JadwalRes;
 use App\Http\Resources\AbsensiCollection as AbsensiRes;
 use Carbon\Carbon;
+use phpDocumentor\Reflection\Types\Null_;
 
 class HomeController extends Controller
 {
@@ -25,7 +26,7 @@ class HomeController extends Controller
     public function getAbsent(Request $request, $date)
     {
         $absentData = AbsensiRes::collection(AbsensiModel::with(['schedule', 'schedule.teacher_mapel.teacher', 'student'])
-            ->whereDate('created_at', Carbon::createFromFormat('m-d-Y', $date)->toDateString())->get());
+            ->whereDate('created_at', Carbon::createFromFormat('m-d-Y', $date)->toDateString())->orderBy('waktu')->get());
 
         /**
          * I use another instance of laravel collection is for remove(filter)
@@ -36,7 +37,39 @@ class HomeController extends Controller
         return generateAPI(['data' => $tempData, 'custom_lenght' => count($tempData), 'message' => generateAPIMessage(['context' => 'jadwal guru', 'type' => 'read'])]);
     }
 
-    public function getSchedule(Request $request)
+    public function getAbsentStudentList(Request $request, $id_schedule, $date)
+    {
+        $absentData = AbsensiRes::collection(AbsensiModel::with(['schedule', 'schedule.teacher_mapel.teacher', 'student'])
+            ->where('id_jadwal', $id_schedule)
+            ->whereDate('created_at', Carbon::createFromFormat('m-d-Y', $date)->toDateString())->orderBy('waktu')->get());
+        $tempData = collect($absentData)->filter();
+
+        return generateAPI(['data' => $tempData, 'custom_lenght' => count($tempData), 'message' => generateAPIMessage(['context' => 'jadwal guru', 'type' => 'find', 'id' => $id_schedule])]);
+    }
+
+    public function getSchedule()
+    {
+        $data = [];
+        $days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        for ($day = 0; $day < 7; $day++) {
+
+            $jadwal = JadwalModel::with(['teacher_mapel.mapel',  'class'])->where('hari', $day + 1)->orderBy('waktu')->get();
+            $res = JadwalRes::collection($jadwal);
+            $temp = collect($res)->filter();
+            $data[$days[$day]] = $temp;
+        }
+
+        return generateAPI(['data' => $data, 'custom_lenght' => count($data), 'message' => generateAPIMessage(['context' => 'jadwal guru', 'type' => 'read',])]);
+    }
+    public function getScheduleByDay(Request $request, $day)
+    {
+        $jadwal = JadwalModel::with(['teacher_mapel.mapel',  'class'])->where('hari', $day)->orderBy('waktu')->get();
+        $res = JadwalRes::collection($jadwal);
+        $data = collect($res)->filter();
+
+        return generateAPI(['data' => $data, 'custom_lenght' => count($data), 'message' => generateAPIMessage(['context' => 'jadwal guru', 'type' => 'read'])]);
+    }
+    public function getScheduleByDate(Request $request, $date)
     {
         /**
          * Don't delete this for a week
@@ -45,7 +78,7 @@ class HomeController extends Controller
         // $pivotId = GuruMapelModel::select('id')->where('id_guru', $guruId)->get();
         // $jadwalModel = JadwalModel::with('teacher_mapel.mapel')->whereIn('id_guru_mapel', $pivotId)->get();
 
-        $jadwalData = JadwalRes::collection(JadwalModel::with('teacher_mapel.mapel')->get());
+        $jadwalData = JadwalRes::collection(JadwalModel::with(['teacher_mapel.mapel',  'class'])->where('hari',  Carbon::createFromFormat('m-d-Y', $date)->dayOfWeekIso + 1)->get());
 
         /**
          * Same with above

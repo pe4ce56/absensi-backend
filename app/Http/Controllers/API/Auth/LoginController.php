@@ -71,10 +71,10 @@ class LoginController extends Controller
         */
         $credentials = [
             'username' => $username,
-            'password' => $request->password
+            'password' => $request->password,
         ];
 
-        if(Auth::attempt($credentials)){
+        if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $role = $user->role;
 

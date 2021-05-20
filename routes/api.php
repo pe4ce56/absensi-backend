@@ -25,7 +25,7 @@ Route::post('/login', 'API\Auth\LoginController@loginProcess');
 
 Route::post('/logout', 'API\Auth\LoginController@logout');
 
-Route::prefix('/admin')->group(function(){
+Route::prefix('/admin')->group(function () {
     Route::post('/login', 'API\Auth\LoginController@loginProcess');
     Route::get('/accessDenied', 'API\Auth\LoginController@accessDenied')->name('accessDenied');
 
@@ -38,7 +38,12 @@ Route::prefix('/admin')->group(function(){
 
 Route::prefix('/guru')->group(function () {
     Route::get('/get-schedule', 'API\Guru\HomeController@getSchedule');
+    Route::get('/get-schedule-by-day/{day}', 'API\Guru\HomeController@getScheduleByDay');
+
     Route::get('/get-absent/{date}', 'API\Guru\HomeController@getAbsent');
+    Route::get('/get-absent-student-list/{id_schedule}/{date}', 'API\Guru\HomeController@getAbsentStudentList');
+
+    Route::get('/get-absent-schedule/{date}', 'API\Guru\HomeController@getScheduleByDate');
 
     Route::get('/profile/{id}', 'API\Guru\ProfileController@getProfileDetails');
     Route::put('/profile/{id}', 'API\Guru\ProfileController@updateProfileDetails');

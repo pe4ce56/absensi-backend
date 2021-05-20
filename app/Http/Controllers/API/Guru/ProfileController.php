@@ -10,6 +10,7 @@ use Auth;
 use App\Models\Guru as GuruModel;
 
 use App\Http\Resources\GuruCollection as GuruRes;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -31,12 +32,13 @@ class ProfileController extends Controller
         $userId = isset($id) ? (GuruModel::find($id)->data_of ?? null) : null;
 
         $validator = Validator::make($request->all(), [
-            'username' => ['required','unique:user,username,'.$userId.',id', 
-                    function ($attribute, $value, $fail) {
-                        !preg_match('/[a-zA-Z]/', $value) ? $fail($attribute.' must contain at least one character') : null;
-                    },
-                    'min:5',
-                ],
+            'username' => [
+                'required', 'unique:user,username,' . $userId . ',id',
+                function ($attribute, $value, $fail) {
+                    !preg_match('/[a-zA-Z]/', $value) ? $fail($attribute . ' must contain at least one character') : null;
+                },
+                'min:5',
+            ],
             'password' => 'required|min:3|max:255',
             'password_conf' => 'required|same:password',
             'profile_pict' => 'image',
@@ -55,8 +57,8 @@ class ProfileController extends Controller
     {
         $id = intval(preg_replace('/[\D]/', '', $id)) ?: null;
 
-        $guruModel = GuruModel::find($id);
-        if(!isset($guruModel)) return generateAPI(['status' => false, 'code' => 404, 'message' => generateAPIMessage(['context' => 'profile guru', 'type' => 'find', 'id' => $id], false)]);
+        $guruModel = GuruModel::where('data_of', $id)->first();
+        if (!$guruModel) return generateAPI(['status' => false, 'code' => 400, 'message' => generateAPIMessage(['context' => 'profile guru', 'type' => 'find', 'id' => $id], false)]);
 
         $guruProfileDetails = GuruRes::make($guruModel);
         return generateAPI(['data' => $guruProfileDetails, 'message' => generateAPIMessage(['context' => 'profile guru', 'type' => 'find', 'id' => $id])]);
@@ -67,10 +69,10 @@ class ProfileController extends Controller
         $id = intval(preg_replace('/[\D]/', '', $id)) ?: null;
 
         $validator = $this->term($request, $id);
-        if($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
+        if ($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
 
         $guruModel = GuruModel::find($id);
-        if(!isset($guruModel)) return generateAPI(['status' => false, 'code' => 404, 'message' => generateAPIMessage(['context' => 'profile guru', 'type' => 'find', 'id' => $id], false)]);
+        if (!isset($guruModel)) return generateAPI(['status' => false, 'code' => 400, 'message' => generateAPIMessage(['context' => 'profile guru', 'type' => 'find', 'id' => $id], false)]);
 
         $guruModel->user->username = $request->username;
         $guruModel->user->password = bcrypt($request->password);
