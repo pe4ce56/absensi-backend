@@ -83,7 +83,7 @@
                                 <a href="#"><i class="demo-pli-computer-secure icon-lg icon-fw"></i> Lock screen</a>
                             </li>
                             <li>
-                                <a href="pages-login.html"><i class="demo-pli-unlock icon-lg icon-fw"></i> Logout</a>
+                                <a href="{{route('logout')}}"><i class="demo-pli-unlock icon-lg icon-fw"></i> Logout</a>
                             </li>
                         </ul>
                     </div>
