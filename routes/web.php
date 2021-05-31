@@ -12,3 +12,13 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/', function(){
+    return '';
+})->name('home');
+
+Route::resource('/kelas', 'Admin\KelasController');
+Route::resource('/siswa', 'Admin\SiswaController');
+Route::resource('/guru', 'Admin\GuruController');
+Route::resource('/mapel', 'Admin\MapelController');
+Route::resource('/jadwal', 'Admin\JadwalController');
