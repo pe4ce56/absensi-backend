@@ -27,8 +27,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         JsonResource::withoutWrapping();
-        if (config('app.env')) {
-            URL::forceScheme("http");
-        };
+        // if (config('app.env') == 'production') {
+        URL::forceScheme("http");
+        // };
     }
 }
