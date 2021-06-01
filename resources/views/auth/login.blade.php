@@ -37,7 +37,7 @@
 
     <!--Pace - Page Load Progress Par [OPTIONAL]-->
     <link href="{{ secure_asset('assets/plugins/pace/pace.min.css') }}" rel="stylesheet">
-    <script src="{{secure_asset('assets/plugins/pace/pace.min.js)}}"></script>
+    <script src="{{secure_asset('assets/plugins/pace/pace.min.js')}}"></script>
 
 
 
