@@ -78,6 +78,18 @@
                     <ul id="mainnav-menu" class="list-group">
 
                         <!--Category name-->
+                        <li class="list-header">Dashboard</li>
+                        <!--Menu list item-->
+                        <li class="{{ isset($data) ? ($data['pageInfo']['page'] === 'dashboard' ? 'active-link' : null) : null}}">
+                            <a href="{{route('dashboard.index')}}">
+                                <i class="ti-fire"></i>
+                                <span class="menu-title">
+                                    Dashboard
+                                </span>
+                            </a>
+                        </li>
+                        
+                        <!--Category name-->
                         <li class="list-header">Management Data</li>
                         <!--Menu list item-->
                         <li class="{{ isset($data) ? ($data['pageInfo']['page'] === 'kelas' ? 'active-link' : null) : null}}">
@@ -96,19 +108,19 @@
                                 </span>
                             </a>
                         </li>
-                        <li class="{{ isset($data) ? ($data['pageInfo']['page'] === 'guru' ? 'active-link' : null) : null }}">
-                            <a href="{{route('guru.index')}}">
-                                <i class="ti-user"></i>
-                                <span class="menu-title">
-                                    Guru
-                                </span>
-                            </a>
-                        </li>
                         <li class="{{ isset($data) ? ($data['pageInfo']['page'] === 'mapel' ? 'active-link' : null) : null }}">
                             <a href="{{route('mapel.index')}}">
                                 <i class="ti-agenda"></i>
                                 <span class="menu-title">
                                     Mapel
+                                </span>
+                            </a>
+                        </li>
+                        <li class="{{ isset($data) ? ($data['pageInfo']['page'] === 'guru' ? 'active-link' : null) : null }}">
+                            <a href="{{route('guru.index')}}">
+                                <i class="ti-user"></i>
+                                <span class="menu-title">
+                                    Guru
                                 </span>
                             </a>
                         </li>

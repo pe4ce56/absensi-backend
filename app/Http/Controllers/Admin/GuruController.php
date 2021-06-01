@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Guru;
+use App\Models\Guru_Mapel;
+use App\Models\Mapel;
 
 class GuruController extends Controller
 {
@@ -30,8 +32,9 @@ class GuruController extends Controller
     public function create()
     {
         $data['pageInfo']['page'] = 'guru';
+        $mapels = Mapel::get();
 
-        return view('admin/guru/create', compact('data'));
+        return view('admin/guru/create', compact('data', 'mapels'));
     }
 
     /**
@@ -42,6 +45,7 @@ class GuruController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
         $this->validate($request, [
             'password' => 'required|min:3|max:255',
             'password_conf' => 'required|same:password',
@@ -52,7 +56,8 @@ class GuruController extends Controller
             'gender' => 'required|in:m,f',
             'whatsapp' => 'required|max:15|unique:guru,whatsapp',
             'address' => 'required',
-            'birth_date' => 'required|date'
+            'birth_date' => 'required|date',
+            'mapels' => 'required'
         ]);
 
         $userModel = new User;
