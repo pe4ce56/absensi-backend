@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Guru_Mapel;
+use App\Models\Kelas;
+use App\Models\Jadwal;
 
 class JadwalController extends Controller
 {
@@ -15,8 +18,10 @@ class JadwalController extends Controller
     public function index()
     {
         $data['pageInfo']['page'] = 'jadwal';
-        
-        return view('admin/jadwal/index', compact('data'));
+        $jadwals = Jadwal::with(['class', 'teacher_mapel', 'teacher_mapel.teacher', 'teacher_mapel.mapel'])->paginate(10);
+        // dd($jadwal);
+
+        return view('admin/jadwal/index', compact('data', 'jadwals'));
     }
 
     /**
@@ -26,7 +31,11 @@ class JadwalController extends Controller
      */
     public function create()
     {
-        //
+        $data['pageInfo']['page'] = 'jadwal';
+        $guruMapels = Guru_Mapel::with(['teacher', 'mapel'])->get();
+        $kelases = Kelas::get();
+
+        return view('admin/jadwal/create', compact('data', 'guruMapels', 'kelases'));
     }
 
     /**
@@ -37,7 +46,21 @@ class JadwalController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'day' => 'required|numeric|between:1,5',
+            'time' => 'required|date_format:H:i',
+            'class' => 'required|numeric',
+            'teacher_mapel' => 'required|numeric'
+        ]);
+
+        $jadwalModel = new Jadwal;
+        $jadwalModel->hari = $request->day;
+        $jadwalModel->waktu = $request->time;
+        $jadwalModel->id_kelas = $request->class;
+        $jadwalModel->id_guru_mapel = $request->teacher_mapel;
+        $jadwalModel->save();
+
+        return redirect()->back()->with('success', 'Berhasil mengisi data.');
     }
 
     /**
@@ -59,7 +82,13 @@ class JadwalController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data['pageInfo']['page'] = 'jadwal';
+        $jadwal = Jadwal::find($id);
+        $guruMapels = Guru_Mapel::with(['teacher', 'mapel'])->get();
+        $kelases = Kelas::get();
+        $dayList = [ 1 => 'senin', 2 => 'selasa', 3 => 'rabu', 4 => 'kamis', 5 => 'jumat'];
+
+        return view('admin/jadwal/edit', compact('data', 'jadwal', 'dayList', 'guruMapels', 'kelases'));
     }
 
     /**
@@ -71,7 +100,21 @@ class JadwalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'day' => 'required|numeric|between:1,5',
+            'time' => 'required|date_format:H:i',
+            // 'class' => 'required|numeric',
+            // 'teacher_mapel' => 'required|numeric'
+        ]);
+
+        $jadwalModel = Jadwal::find($id);
+        $jadwalModel->hari = $request->day;
+        $jadwalModel->waktu = $request->time;
+        // $jadwalModel->id_kelas = $request->class;
+        // $jadwalModel->id_guru_mapel = $request->teacher_mapel;
+        $jadwalModel->save();
+
+        return redirect()->back()->with('success', 'Berhasil merubah data.');
     }
 
     /**
@@ -82,6 +125,9 @@ class JadwalController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $jadwalModel = Jadwal::find($id);
+        $jadwalModel->delete();
+
+        return redirect()->back()->with('success', 'Berhasil menghapus data.');
     }
 }

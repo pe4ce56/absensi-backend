@@ -31,7 +31,6 @@ class GuruController extends Controller
      */
     public function create()
     {
-        // dd(Guru_Mapel::get());
         $data['pageInfo']['page'] = 'guru';
         $mapels = Mapel::get();
 
@@ -84,7 +83,7 @@ class GuruController extends Controller
             $guruMapel->save();
         }
 
-        return redirect()->back()->with('success', 'Berhasil merubah data.');
+        return redirect()->back()->with('success', 'Berhasil mengisi data.');
     }
 
     /**

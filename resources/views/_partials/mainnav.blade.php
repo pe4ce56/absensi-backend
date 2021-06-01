@@ -82,13 +82,13 @@
                         <!--Menu list item-->
                         <li class="{{ isset($data) ? ($data['pageInfo']['page'] === 'dashboard' ? 'active-link' : null) : null}}">
                             <a href="{{route('dashboard.index')}}">
-                                <i class="ti-fire"></i>
+                                <i class="ti-dashboard"></i>
                                 <span class="menu-title">
                                     Dashboard
                                 </span>
                             </a>
                         </li>
-                        
+
                         <!--Category name-->
                         <li class="list-header">Management Data</li>
                         <!--Menu list item-->
