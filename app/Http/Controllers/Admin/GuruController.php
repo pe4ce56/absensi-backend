@@ -19,7 +19,7 @@ class GuruController extends Controller
     public function index()
     {
         $data['pageInfo']['page'] = 'guru';
-        $gurus = Guru::with(['user', 'mapels'])->paginate(10);
+        $gurus = Guru::with(['user', 'mapels'])->orderBy('created_at', 'desc')->orderBy('updated_at', 'desc')->paginate(10);
 
         return view('admin/guru/index', compact('data', 'gurus'));
     }
@@ -31,6 +31,7 @@ class GuruController extends Controller
      */
     public function create()
     {
+        // dd(Guru_Mapel::get());
         $data['pageInfo']['page'] = 'guru';
         $mapels = Mapel::get();
 
@@ -45,7 +46,6 @@ class GuruController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
         $this->validate($request, [
             'password' => 'required|min:3|max:255',
             'password_conf' => 'required|same:password',
@@ -76,6 +76,13 @@ class GuruController extends Controller
         $guruModel->alamat = $request->address;
         $guruModel->tanggal_lahir = $request->birth_date;
         $guruModel->save();
+        
+        foreach($request->mapels as $mapel){
+            $guruMapel = new Guru_Mapel;
+            $guruMapel->id_guru = $guruModel->id;
+            $guruMapel->id_mapel = intval($mapel);
+            $guruMapel->save();
+        }
 
         return redirect()->back()->with('success', 'Berhasil merubah data.');
     }
@@ -100,9 +107,10 @@ class GuruController extends Controller
     public function edit($id)
     {
         $data['pageInfo']['page'] = 'guru';
+        $mapels = Mapel::get();
         $guru = Guru::with(['user', 'mapels'])->find($id);
 
-        return view('admin/guru/edit', compact('data', 'guru'));
+        return view('admin/guru/edit', compact('data', 'guru', 'mapels'));
     }
 
     /**
@@ -124,7 +132,8 @@ class GuruController extends Controller
             'gender' => 'required|in:m,f',
             'whatsapp' => 'required|max:15|unique:guru,whatsapp,'.$id.',id',
             'address' => 'required',
-            'birth_date' => 'required|date'
+            'birth_date' => 'required|date',
+            'mapels' => 'required'
         ]);
 
         $guruModel = Guru::find($id);
@@ -140,6 +149,14 @@ class GuruController extends Controller
         $guruModel->user->save();
         $guruModel->save();
 
+        $deleteOldGuruMapel = Guru_Mapel::where('id_guru', $guruModel->id)->delete();
+        foreach($request->mapels as $mapel){
+            $guruMapel = new Guru_Mapel;
+            $guruMapel->id_guru = $guruModel->id;
+            $guruMapel->id_mapel = intval($mapel);
+            $guruMapel->save();
+        }
+
         return redirect()->back()->with('success', 'Berhasil merubah data.');
     }
 
@@ -153,6 +170,7 @@ class GuruController extends Controller
     {
         $guruModel = Guru::find($id);
         $guruModel->user()->delete();
+        $guruModel->mapels()->delete();
         $guruModel->delete();
 
         return redirect()->back()->with('success', 'Berhasil menghapus data.');

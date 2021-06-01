@@ -18,7 +18,7 @@ class GuruSeeder extends Seeder
         $nipsOrTeacherCode = [];
         $genders = ['male', 'female'];
 
-        for($i = 0; $i<700; $i++){
+        for($i = 0; $i<13; $i++){
             $TType = $teacherTypes[array_rand($teacherTypes)];
             $numerifyString = '';
 
