@@ -25,11 +25,11 @@ Route::post('/login', 'API\Auth\LoginController@defaultLogin');
 
 Route::post('/logout', 'API\Auth\LoginController@logout');
 
-Route::prefix('/operator')->group(function(){
+Route::prefix('/operator')->group(function () {
     Route::post('/login', 'API\Auth\LoginController@operatorLogin');
 });
 
-Route::prefix('/admin')->group(function(){
+Route::prefix('/admin')->group(function () {
     Route::post('/login', 'API\Auth\LoginController@adminLogin');
     Route::get('/accessDenied', 'API\Auth\LoginController@accessDenied')->name('accessDenied');
 
