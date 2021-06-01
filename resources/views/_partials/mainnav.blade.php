@@ -78,7 +78,7 @@
                     <ul id="mainnav-menu" class="list-group">
 
                         <!--Category name-->
-                        <li class="list-header">Dashboard</li>
+                        <li class="list-header">Main</li>
                         <!--Menu list item-->
                         <li class="{{ isset($data) ? ($data['pageInfo']['page'] === 'dashboard' ? 'active-link' : null) : null}}">
                             <a href="{{route('dashboard.index')}}">
@@ -88,6 +88,17 @@
                                 </span>
                             </a>
                         </li>
+
+                        <li class="{{ isset($data) ? ($data['pageInfo']['page'] === 'dashboard' ? 'active-link' : null) : null}}">
+                            <a href="{{route('dashboard.index')}}">
+                                <i class="ti-agenda"></i>
+                                <span class="menu-title">
+                                    Absensi
+                                </span>
+                            </a>
+                        </li>
+
+                        <li class="list-divider"></li>
 
                         <!--Category name-->
                         <li class="list-header">Management Data</li>

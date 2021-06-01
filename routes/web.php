@@ -22,6 +22,8 @@ Route::post('/login', 'Auth\LoginController@login')->name('login.process');
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', 'Admin\HomeController@index')->name('dashboard.index');
+    Route::get('/absent', 'Admin\AbsensiController@index')->name('absensi.index');
+    
     Route::resource('/kelas', 'Admin\KelasController');
     Route::resource('/siswa', 'Admin\SiswaController');
     Route::resource('/guru', 'Admin\GuruController');
