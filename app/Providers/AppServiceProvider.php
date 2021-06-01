@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
     {
         JsonResource::withoutWrapping();
         // if (config('app.env') == 'production') {
-        URL::forceScheme("http");
+        URL::forceScheme("https");
         // };
     }
 }
