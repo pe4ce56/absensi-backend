@@ -32,29 +32,6 @@ class LoginController extends Controller
         return $validator;
     }
 
-    /*
-    public function loginAsAdmin(Request $request)
-    {
-        $validator = $this->term($request);
-        if ($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
-
-        $credentials = [
-            'username' => $request->username,
-            'password' => $request->password,
-            'role' => 'admin'
-        ];
-
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $data['token'] = $user->createToken('AsAdmin')->accessToken;
-            $data['user'] = new \stdClass();
-            $data['user']->id = $user->id;
-            $data['user']->role = 'admin';
-            return generateAPI(['message' => 'Login Sukses', 'data' => $data, 'status' => true]);
-        }
-    }
-    */
-
     private function loginProcess(array $credentials)
     {
         /*
@@ -65,7 +42,7 @@ class LoginController extends Controller
         * For teacher tidak tetap username is Teacher Code
         */
 
-        if(Auth::attempt($credentials)){
+        if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $role = $user->role;
 

@@ -120,7 +120,7 @@ class HomeController extends Controller
             'absent_time' => 'required|date_format:H:i:s',
             'location' => 'required',
         ]);
-        if ($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
+        if ($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 400, 'status' => false]);
 
         $absensiModel = new AbsensiModel;
         $absensiModel->id_siswa = $siswaId;

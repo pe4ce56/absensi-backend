@@ -27,7 +27,8 @@ class SiswaCollection extends JsonResource
             'student_pict' => $this->foto_siswa,
             'class' => new KelasCollection($this->whenLoaded('class')),
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'updated_at' => $this->updated_at,
+            'total' => $this->total ? $this->total : null
         ];
     }
 }
