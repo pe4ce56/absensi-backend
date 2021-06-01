@@ -32,12 +32,7 @@ class GuruController extends Controller
         $userId = isset($id) ? (GuruModel::find($id)->data_of ?? null) : null;
 
         $validator = Validator::make($request->all(), [
-            'username' => ['required','unique:user,username,'.$userId.',id', 
-                    function ($attribute, $value, $fail) {
-                        !preg_match('/[a-zA-Z]/', $value) ? $fail($attribute.' must contain at least one character') : null;
-                    },
-                    'min:5',
-                ],
+            'username' => ['required','unique:user,username,'.$userId.',id','digits:18'],
             'password' => 'required|min:3|max:255',
             'password_conf' => 'required|same:password',
             'profile_pict' => 'image',

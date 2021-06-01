@@ -32,36 +32,8 @@ class LoginController extends Controller
         return $validator;
     }
 
-    /*
-    public function loginAsAdmin(Request $request)
+    private function loginProcess(array $credentials)
     {
-        $validator = $this->term($request);
-        if ($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
-
-        $credentials = [
-            'username' => $request->username,
-            'password' => $request->password,
-            'role' => 'admin'
-        ];
-
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $data['token'] = $user->createToken('AsAdmin')->accessToken;
-            $data['user'] = new \stdClass();
-            $data['user']->id = $user->id;
-            $data['user']->role = 'admin';
-            return generateAPI(['message' => 'Login Sukses', 'data' => $data, 'status' => true]);
-        }
-    }
-    */
-
-    public function loginProcess(Request $request)
-    {
-        $validator = $this->term($request);
-        if ($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
-
-        $username = $request->username;
-
         /*
         * For array in Auth::attempt
         * For role admin and worker is login is use username and password
@@ -69,10 +41,6 @@ class LoginController extends Controller
         * For teacher role username is NIP
         * For teacher tidak tetap username is Teacher Code
         */
-        $credentials = [
-            'username' => $username,
-            'password' => $request->password,
-        ];
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
@@ -88,9 +56,69 @@ class LoginController extends Controller
             $data['user']->username = $user->username;
             $data['user']->profile_pict = $user->foto_profil;
 
-            return generateAPI(['message' => 'Login Sukses', 'data' => $data, 'status' => true]);
+            return $data;
         }
-        return generateAPI(['message' => 'Harap periksa username dan password', 'code' => 403, 'status' => false]);
+        return false;
+    }
+
+    public function defaultLogin(Request $request)
+    {
+        /**
+         * REQUIRED
+         * Validate the user input before processing ! 
+         */
+        $validator = $this->term($request);
+        if ($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
+
+        $credentials = [
+            'username' => $request->username,
+            'password' => $request->password,
+            'role' => ['siswa', 'guru']
+        ];
+
+        $login = $this->loginProcess($credentials);
+
+        return $login ? generateAPI(['message' => 'Login Sukses', 'data' => $login, 'status' => true]) : generateAPI(['message' => 'Harap periksa username dan password', 'code' => 403, 'status' => false]);
+    }
+
+    public function operatorLogin(Request $request)
+    {
+        /**
+         * REQUIRED
+         * Validate the user input before processing ! 
+         */
+        $validator = $this->term($request);
+        if ($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
+
+        $credentials = [
+            'username' => $request->username,
+            'password' => $request->password,
+            'role' => 'operator'
+        ];
+
+        $login = $this->loginProcess($credentials);
+
+        return $login ? generateAPI(['message' => 'Login Sukses', 'data' => $login, 'status' => true]) : generateAPI(['message' => 'Harap periksa username dan password', 'code' => 403, 'status' => false]);
+    }
+
+    public function adminLogin(Request $request)
+    {
+        /**
+         * REQUIRED
+         * Validate the user input before processing ! 
+         */
+        $validator = $this->term($request);
+        if ($validator->fails()) return generateAPI(['data' => $validator->messages()->toArray(), 'message' => 'Validation Error', 'code' => 403, 'status' => false]);
+
+        $credentials = [
+            'username' => $request->username,
+            'password' => $request->password,
+            'role' => 'admin'
+        ];
+
+        $login = $this->loginProcess($credentials);
+
+        return $login ? generateAPI(['message' => 'Login Sukses', 'data' => $login, 'status' => true]) : generateAPI(['message' => 'Harap periksa username dan password', 'code' => 403, 'status' => false]);
     }
 
     public function logout(Request $request)
