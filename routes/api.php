@@ -21,12 +21,16 @@ use API\Admin\JadwalController;
 */
 
 
-Route::post('/login', 'API\Auth\LoginController@loginProcess');
+Route::post('/login', 'API\Auth\LoginController@defaultLogin');
 
 Route::post('/logout', 'API\Auth\LoginController@logout');
 
-Route::prefix('/admin')->group(function () {
-    Route::post('/login', 'API\Auth\LoginController@loginProcess');
+Route::prefix('/operator')->group(function(){
+    Route::post('/login', 'API\Auth\LoginController@operatorLogin');
+});
+
+Route::prefix('/admin')->group(function(){
+    Route::post('/login', 'API\Auth\LoginController@adminLogin');
     Route::get('/accessDenied', 'API\Auth\LoginController@accessDenied')->name('accessDenied');
 
     Route::apiResource('/mapel', MapelController::class);
