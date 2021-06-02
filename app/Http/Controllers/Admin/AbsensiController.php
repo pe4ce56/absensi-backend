@@ -17,7 +17,7 @@ class AbsensiController extends Controller
         $startTime = Carbon::now();
         // $startTime->hour = 09;
         // $startTime->minute = 00;
-        dd($absents_come, $absents_out);
+        // dd($absents_come, $absents_out);
 
         return view('admin.absensi.index', compact('data', 'absents_come'));
     }
