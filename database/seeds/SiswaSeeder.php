@@ -17,7 +17,7 @@ class SiswaSeeder extends Seeder
         // $usernames = [];
         $nisns = [];
 
-        for($i = 0; $i<1000; $i++){
+        for($i = 0; $i<100; $i++){
             // $usernames []= $faker->unique()->username;
             $nisns []= $faker->unique()->numerify('##########');
 
