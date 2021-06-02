@@ -89,8 +89,8 @@
                             </a>
                         </li>
 
-                        <li class="{{ isset($data) ? ($data['pageInfo']['page'] === 'dashboard' ? 'active-link' : null) : null}}">
-                            <a href="{{route('dashboard.index')}}">
+                        <li class="{{ isset($data) ? ($data['pageInfo']['page'] === 'absensi' ? 'active-link' : null) : null}}">
+                            <a href="{{route('absensi.index')}}">
                                 <i class="ti-agenda"></i>
                                 <span class="menu-title">
                                     Absensi
