@@ -20,15 +20,15 @@
 
 
     <!--Bootstrap Stylesheet [ REQUIRED ]-->
-    <link href="{{ secure_asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
 
 
     <!--Nifty Stylesheet [ REQUIRED ]-->
-    <link href="{{ secure_asset('assets/css/nifty.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/nifty.min.css') }}" rel="stylesheet">
 
 
     <!--Nifty Premium Icon [ DEMONSTRATION ]-->
-    <link href="{{ secure_asset('assets/css/demo/nifty-demo-icons.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/demo/nifty-demo-icons.min.css') }}" rel="stylesheet">
 
 
     <!--=================================================-->
@@ -36,8 +36,8 @@
 
 
     <!--Pace - Page Load Progress Par [OPTIONAL]-->
-    <link href="{{ secure_asset('assets/plugins/pace/pace.min.css') }}" rel="stylesheet">
-    <script src="{{secure_asset('assets/plugins/pace/pace.min.js')}}"></script>
+    <link href="{{ asset('assets/plugins/pace/pace.min.css') }}" rel="stylesheet">
+    <script src="{{asset('assets/plugins/pace/pace.min.js')}}"></script>
 
 
 
@@ -124,15 +124,15 @@
     <!--=================================================-->
 
     <!--jQuery [ REQUIRED ]-->
-    <script src="{{ secure_asset('assets/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
 
 
     <!--BootstrapJS [ RECOMMENDED ]-->
-    <script src="{{ secure_asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
 
 
     <!--NiftyJS [ RECOMMENDED ]-->
-    <script src="{{ secure_asset('assets/js/nifty.min.js') }}"></script>
+    <script src="{{ asset('assets/js/nifty.min.js') }}"></script>
 
 </body>
 
