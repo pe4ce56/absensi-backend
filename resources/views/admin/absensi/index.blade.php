@@ -44,10 +44,10 @@
                     <th>Lokasi Absen</th>
                     <th>Keterangan</th>
                     <th>Status</th>
-                    <th>Aksi</th>
+                    {{-- <th>Aksi</th> --}}
                 </thead>
                 <tbody>
-                    @foreach($absents as $absent)
+                    @foreach($absents as $i => $absent)
                     <tr>
                         <td scope="row">#</td>
                         <td>{{$absent->student->nama}} | {{ $absent->student->NISN }}</td>
@@ -59,8 +59,16 @@
                             <a class="btn btn-sm btn-success" target="_blank" href="https://www.google.com/maps/search/?api=1&query={{ json_decode($absent->lokasi)->lat }},{{ json_decode($absent->lokasi)->long }}">Cek Lokasi</a>
                         </td>
                         <td>{{ $absent->keterangan ?? '-' }}</td>
-                        <td>{{ $absent->keterangan ?? '-' }}</td>
-                        <td></td>
+                        <td>
+                            <strong>
+                                <input type="radio" name="status-{{$i}}" {{ $absent->status === '' || $absent->status === null ? 'checked' : null }} disabled>N/A
+                                <input type="radio" name="status-{{$i}}" {{ $absent->status === 's' ? 'checked' : null }} disabled>S
+                                <input type="radio" name="status-{{$i}}" {{ $absent->status === 'i' ? 'checked' : null }} disabled>I
+                                <input type="radio" name="status-{{$i}}" {{ $absent->status === 'a' ? 'checked' : null }} disabled>A
+                            </strong>
+                            {{-- {{ $absent->status ?? '-' }} --}}
+                        </td>
+                        {{-- <td></td> --}}
                         {{--<td>
                             <form method="post" action="{{route('absensi.destroy', $absensi->id)}}">
                         @csrf
@@ -74,6 +82,7 @@
                 </tbody>
             </table>
         </div>
+        <a href="{{route('print')}}" class="btn btn-dark">Print <i class="ti-printer"></i></a>
         {{$absents->links()}}
     </div>
     <div class="panel-footer">

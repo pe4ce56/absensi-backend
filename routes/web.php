@@ -23,7 +23,8 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', 'Admin\HomeController@index')->name('dashboard.index');
     Route::get('/absent', 'Admin\AbsensiController@index')->name('absensi.index');
-    
+    Route::get('/print-report', 'Admin\AbsensiController@printReport')->name('print');
+
     Route::resource('/kelas', 'Admin\KelasController');
     Route::resource('/siswa', 'Admin\SiswaController');
     Route::resource('/guru', 'Admin\GuruController');

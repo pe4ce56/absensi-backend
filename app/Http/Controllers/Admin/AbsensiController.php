@@ -20,4 +20,11 @@ class AbsensiController extends Controller
 
         return view('admin.absensi.index', compact('data', 'absents'));
     }
+
+    public function printReport()
+    {
+        $absents = Absensi::get();
+
+        return view('admin.report.print', compact('absents'));
+    }
 }
