@@ -14,8 +14,6 @@
                     </div>
                     -->
 
-
-
         <!--Menu-->
         <!--================================-->
         <div id="mainnav-menu-wrap">
@@ -30,8 +28,8 @@
                                 <img class="img-circle img-md" src="{{asset('assets/img/profile-photos/1.png')}}" alt="Profile Picture">
                             </div>
                             <div class="box-block">
-                                <p class="mnp-name">Aaron Chavez</p>
-                                <span class="mnp-desc">aaron.cha@themeon.net</span>
+                                <p class="mnp-name">{{ucfirst(Auth::user()->username)}}</p>
+                                <span class="mnp-desc">{{ ucfirst(Auth::user()->role) }}</span>
                             </div>
                         </div>
                     </div>

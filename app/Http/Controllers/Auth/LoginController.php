@@ -28,7 +28,7 @@ class LoginController extends Controller
         ];
 
         if(Auth::attempt($credentials)){
-            return redirect(route('kelas.index'));
+            return redirect(route('dashboard.index'));
         }
 
         return redirect()->back()->with('error', 'Harap periksa username/password.');
