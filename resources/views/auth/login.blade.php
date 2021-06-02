@@ -3,6 +3,7 @@
 
 
 <!-- Mirrored from www.themeon.net/nifty/v2.9.1/pages-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 02 Feb 2019 04:04:56 GMT -->
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,7 +37,7 @@
 
     <!--Pace - Page Load Progress Par [OPTIONAL]-->
     <link href="{{ asset('assets/plugins/pace/pace.min.css') }}" rel="stylesheet">
-    <script src="plugins/pace/pace.min.js"></script>
+    <script src="{{asset('assets/plugins/pace/pace.min.js')}}"></script>
 
 
 
@@ -136,4 +137,5 @@
 </body>
 
 <!-- Mirrored from www.themeon.net/nifty/v2.9.1/pages-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 02 Feb 2019 04:05:02 GMT -->
+
 </html>
