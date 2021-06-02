@@ -1,6 +1,9 @@
 @extends('_partials/master')
 @section('title', 'Edit Guru')
 @section('css')
+<link href="{{asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
+@endsection
+@section('css')
 <!--Chosen [ OPTIONAL ]-->
 <link href="{{asset('assets/plugins/chosen/chosen.min.css')}}" rel="stylesheet">
 @endsection
@@ -115,6 +118,18 @@
                         @enderror
                     </div>
 
+                    <div class="form-group @error('mapels') has-error @enderror">
+                        <label class="control-label">Mapel*</label>
+                        <select id="mapel-select2" multiple="multiple" name="mapels[]" class="form-control">
+                            @foreach($mapels as $mapel)
+                            <option value="{{$mapel->id}}" @foreach($guru->mapels as $gMapel) {{ $gMapel->id === $mapel->id ? 'selected' : null }} @endforeach>{{$mapel->nama}}</option>
+                            @endforeach
+                        </select>
+                        @error('mapels')
+                        <small class="help-block">{{ $message }}</small>
+                        @enderror
+                    </div>
+
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </div>
@@ -127,9 +142,9 @@
 @section('js')
 <!--Chosen [ OPTIONAL ]-->
 <script src="{{asset('assets/plugins/chosen/chosen.jquery.min.js')}}"></script>
-
+<script src="{{asset('assets/plugins/select2/js/select2.min.js')}}"></script>
 <script>
     $('#demo-chosen-select').chosen()
-
+    $('#mapel-select2').select2()
 </script>
 @endsection

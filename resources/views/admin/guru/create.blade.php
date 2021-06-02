@@ -1,5 +1,8 @@
 @extends('_partials/master')
 @section('title', 'Tambah Guru')
+@section('css')
+<link href="{{asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
+@endsection
 @section('page-head')
 <!--Page Title-->
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
@@ -109,6 +112,18 @@
                         @enderror
                     </div>
 
+                    <div class="form-group @error('mapels') has-error @enderror">
+                        <label class="control-label">Mapel*</label>
+                        <select id="mapel-select2" multiple="multiple" name="mapels[]" class="form-control">
+                            @foreach($mapels as $mapel)
+                            <option value="{{$mapel->id}}">{{$mapel->nama}}</option>
+                            @endforeach
+                        </select>
+                        @error('mapels')
+                        <small class="help-block">{{ $message }}</small>
+                        @enderror
+                    </div>
+
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </div>
@@ -117,4 +132,10 @@
         </div>
     </form>
 </div>
+@endsection
+@section('js')
+<script src="{{asset('assets/plugins/select2/js/select2.min.js')}}"></script>
+<script>
+    $('#mapel-select2').select2()
+</script>
 @endsection
