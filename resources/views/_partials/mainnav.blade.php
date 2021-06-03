@@ -141,6 +141,29 @@
                                 </span>
                             </a>
                         </li>
+
+                        <li class="list-divider"></li>
+
+                        <!--Category name-->
+                        <li class="list-header">Akun</li>
+                        <!--Menu list item-->
+                        <li class="{{ isset($data) ? ($data['pageInfo']['page'] === 'change-password' ? 'active-link' : null) : null}}">
+                            <a href="{{route('change-password.index')}}">
+                                <i class="ti-key"></i>
+                                <span class="menu-title">
+                                    Ubah Password
+                                </span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{route('logout')}}">
+                                <i class="ti-power-off"></i>
+                                <span class="menu-title">
+                                    Logout
+                                </span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

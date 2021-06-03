@@ -1,5 +1,8 @@
 @extends('_partials/master')
 @section('title', 'Absensi')
+@section('css')
+<link href="{{asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
+@endsection
 @section('page-head')
 <!--Page Title-->
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
@@ -18,6 +21,7 @@
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <!--End breadcrumb-->
 @endsection
+{{-- {{ dd(request()->get('class')) }} --}}
 @section('content')
 <div class="panel">
     <div class="panel-heading">
@@ -25,6 +29,21 @@
         <!-- <a href="{{route('guru.create')}}" class="btn btn-primary">Tambah</a> -->
     </div>
     <div class="panel-body">
+        <form method="get" style="display: flex; width: 150px">
+            {{-- <div class="form-group @error('mapels') has-error @enderror">
+            </div> --}}
+            <select id="select2" class="form-control w-25" onchange="javascript:location.href = this.value;">
+                <optgroup label="Kelas">
+                    <option value="/absent">-</option>
+                    @foreach($kelases as $key => $kelas)
+                    <option value="/absent?class={{$kelas->id}}" {{ request()->get('class') == $kelas->id ? 'selected' : ''}}>{{ $kelas->nama }}</option>
+                    @endforeach
+                </optgroup>
+            </select>
+
+            {{-- <input type="submit" class="btn btn-primary" value="Filter" style="margin-left: 10px"> --}}
+        </form>
+
         @if (Session::has('success'))
         <div class="alert alert-success">
             <button class="close" data-dismiss="alert"><i class="pci-cross pci-circle"></i></button>
@@ -32,7 +51,7 @@
         </div>
         @endif
 
-        <div class="table-responsive">
+        <div class="table-responsive" style="margin-top: 1rem">
             <table class="table table-striped table-hover">
                 <thead class="thead-inverse">
                     <th>#</th>
@@ -82,12 +101,24 @@
                 </tbody>
             </table>
         </div>
-        <a href="{{route('print')}}" class="btn btn-dark">Print <i class="ti-printer"></i></a>
-        {{$absents->links()}}
+
+        <form method="post" action="{{route('print')}}">
+            @csrf
+            <input type="hidden" name="class" value="{{request()->get('class')}}">
+            <button type="submit" class="btn btn-dark" {{count($absents) < 1 ? 'disabled' : null}}>Print <i class="ti-printer"></i></button>
+        </form>
+        {{-- {{$absents->links()}} --}}
     </div>
     <div class="panel-footer">
 
     </div>
 </div>
 
+@endsection
+@section('js')
+<script src="{{asset('assets/plugins/select2/js/select2.min.js')}}"></script>
+<script>
+    $('#select2').select2()
+
+</script>
 @endsection

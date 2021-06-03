@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
 use App\Models\Kelas;
+use App\Models\User;
 use App\Models\Guru;
+use \Auth;
 
 class HomeController extends Controller
 {
@@ -18,5 +20,26 @@ class HomeController extends Controller
         $data['class_count'] = Kelas::get()->count();
 
         return view('admin.dashboard.index', compact('data'));
+    }
+
+    public function changePassword(Request $request)
+    {
+        $data['pageInfo']['page'] = 'change-password';
+
+        return view('admin.account.changepass', compact('data'));
+    }
+
+    public function changePasswordStore(Request $request)
+    {
+        $this->validate($request, [
+            'password' => 'required|min:3|max:255',
+            'password_conf' => 'required|same:password',
+        ]);
+        
+        $user = User::find(Auth::user()->id);
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return redirect()->back()->with('success', 'Berhasil mengubah password.');
     }
 }
