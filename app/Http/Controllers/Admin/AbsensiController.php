@@ -13,6 +13,9 @@ class AbsensiController extends Controller
     public function index(Request $request)
     {
         $data['pageInfo']['page'] = 'absensi';
+        $jsonString = file_get_contents(base_path('configuration.json'));
+        $data['configuration'] = json_decode($jsonString, true);
+        
         $absents = Absensi::get();
         $class = $request->class;
         
@@ -31,6 +34,19 @@ class AbsensiController extends Controller
         // dd($absents_come, $absents_out);
 
         return view('admin.absensi.index', compact('data', 'absents', 'kelases'));
+    }
+
+    public function changeStatus(Request $request, $id)
+    {
+        $this->validate($request, [
+            'status' => 'required|in:n/a,s,i,a'
+        ]);
+        
+        $absent = Absensi::find($id);
+        $absent->status = $request->status == 'n/a' ? null : $request->status;
+        $absent->save();
+        
+        return redirect()->back()->with('success', 'Berhasil mengubah data.');
     }
 
     public function printReport(Request $request)

@@ -44,6 +44,12 @@
             {{-- <input type="submit" class="btn btn-primary" value="Filter" style="margin-left: 10px"> --}}
         </form>
 
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <button class="close" data-dismiss="alert"><i class="pci-cross pci-circle"></i></button>
+            <strong>Oh no!</strong> Gagal merubah data
+        </div>
+        @endif
         @if (Session::has('success'))
         <div class="alert alert-success">
             <button class="close" data-dismiss="alert"><i class="pci-cross pci-circle"></i></button>
@@ -79,12 +85,16 @@
                         </td>
                         <td>{{ $absent->keterangan ?? '-' }}</td>
                         <td>
-                            <strong>
-                                <input type="radio" name="status-{{$i}}" {{ $absent->status === '' || $absent->status === null ? 'checked' : null }} disabled>N/A
-                                <input type="radio" name="status-{{$i}}" {{ $absent->status === 's' ? 'checked' : null }} disabled>S
-                                <input type="radio" name="status-{{$i}}" {{ $absent->status === 'i' ? 'checked' : null }} disabled>I
-                                <input type="radio" name="status-{{$i}}" {{ $absent->status === 'a' ? 'checked' : null }} disabled>A
-                            </strong>
+                            <form method="post" action="{{route('absensi.change-status', $absent->id)}}">
+                                @csrf
+                                <strong>
+                                    <input type="radio" name="status" value="n/a" {{ $absent->status === '' || $absent->status === null ? 'checked' : null }}>N/A
+                                    <input type="radio" name="status" value="s" {{ $absent->status === 's' ? 'checked' : null }}>S
+                                    <input type="radio" name="status" value="i" {{ $absent->status === 'i' ? 'checked' : null }}>I
+                                    <input type="radio" name="status" value="a" {{ $absent->status === 'a' ? 'checked' : null }}>A
+                                </strong>
+                                <input type="submit" class="btn btn-primary btn-sm" style="margin-left:.5em" value="Ubah">
+                            </form>
                             {{-- {{ $absent->status ?? '-' }} --}}
                         </td>
                         {{-- <td></td> --}}

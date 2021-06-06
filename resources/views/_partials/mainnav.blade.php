@@ -143,6 +143,19 @@
                         </li>
 
                         <li class="list-divider"></li>
+                        <!--Category name-->
+                        <li class="list-header">Pengaturan</li>
+                        <!--Menu list item-->
+                        <li class="{{ isset($data) ? ($data['pageInfo']['page'] === 'setting' ? 'active-link' : null) : null}}">
+                            <a href="{{route('setting.index')}}">
+                                <i class="ti-settings"></i>
+                                <span class="menu-title">
+                                    Pengaturan
+                                </span>
+                            </a>
+                        </li>
+
+                        <li class="list-divider"></li>
 
                         <!--Category name-->
                         <li class="list-header">Akun</li>

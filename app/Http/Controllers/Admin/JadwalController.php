@@ -18,6 +18,8 @@ class JadwalController extends Controller
     public function index()
     {
         $data['pageInfo']['page'] = 'jadwal';
+        $jsonString = file_get_contents(base_path('configuration.json'));
+        $data['configuration'] = json_decode($jsonString, true);
         $jadwals = Jadwal::with(['class', 'teacher_mapel', 'teacher_mapel.teacher', 'teacher_mapel.mapel'])->paginate(10);
         // dd($jadwal);
 
@@ -32,6 +34,8 @@ class JadwalController extends Controller
     public function create()
     {
         $data['pageInfo']['page'] = 'jadwal';
+        $jsonString = file_get_contents(base_path('configuration.json'));
+        $data['configuration'] = json_decode($jsonString, true);
         $guruMapels = Guru_Mapel::with(['teacher', 'mapel'])->get();
         $kelases = Kelas::get();
 
@@ -83,6 +87,8 @@ class JadwalController extends Controller
     public function edit($id)
     {
         $data['pageInfo']['page'] = 'jadwal';
+        $jsonString = file_get_contents(base_path('configuration.json'));
+        $data['configuration'] = json_decode($jsonString, true);
         $jadwal = Jadwal::find($id);
         $guruMapels = Guru_Mapel::with(['teacher', 'mapel'])->get();
         $kelases = Kelas::get();

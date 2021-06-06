@@ -15,6 +15,8 @@ class HomeController extends Controller
     public function index()
     {
         $data['pageInfo']['page'] = 'dashboard';
+        $jsonString = file_get_contents(base_path('configuration.json'));
+        $data['configuration'] = json_decode($jsonString, true);
         $data['student_count'] = Siswa::get()->count();
         $data['teacher_count'] = Guru::get()->count();
         $data['class_count'] = Kelas::get()->count();
@@ -25,6 +27,8 @@ class HomeController extends Controller
     public function changePassword(Request $request)
     {
         $data['pageInfo']['page'] = 'change-password';
+        $jsonString = file_get_contents(base_path('configuration.json'));
+        $data['configuration'] = json_decode($jsonString, true);
 
         return view('admin.account.changepass', compact('data'));
     }

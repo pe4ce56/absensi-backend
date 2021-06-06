@@ -16,7 +16,11 @@ class LoginController extends Controller
 
     public function index()
     {
-        return view('auth.login');
+        $data['pageInfo']['page'] = 'login';
+        $jsonString = file_get_contents(base_path('configuration.json'));
+        $data['configuration'] = json_decode($jsonString, true);
+
+        return view('auth.login', compact('data'));
     }
 
     public function login(Request $request)

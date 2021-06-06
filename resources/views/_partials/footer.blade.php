@@ -10,7 +10,7 @@
     <!-- Remove the class "show-fixed" and "hide-fixed" to make the content always appears. -->
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-    <p class="pad-lft">&#0169; 2018 Your Company</p>
+    <p class="pad-lft">&#0169; 2021 {{ $data['configuration']['app-name'] ?? '' }}</p>
 
 
 
