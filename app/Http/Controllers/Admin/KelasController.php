@@ -16,6 +16,8 @@ class KelasController extends Controller
     public function index()
     {
         $data['pageInfo']['page'] = 'kelas';
+        $jsonString = file_get_contents(base_path('configuration.json'));
+        $data['configuration'] = json_decode($jsonString, true);
         $kelasses = Kelas::with('students')->paginate(10);
 
         return view('admin/kelas/index', compact('data', 'kelasses'));
@@ -29,6 +31,8 @@ class KelasController extends Controller
     public function create()
     {
         $data['pageInfo']['page'] = 'kelas';
+        $jsonString = file_get_contents(base_path('configuration.json'));
+        $data['configuration'] = json_decode($jsonString, true);
 
         return view('admin/kelas/create', compact('data'));
     }
@@ -72,6 +76,8 @@ class KelasController extends Controller
     public function edit($id)
     {
         $data['pageInfo']['page'] = 'kelas';
+        $jsonString = file_get_contents(base_path('configuration.json'));
+        $data['configuration'] = json_decode($jsonString, true);
         $kelas = Kelas::with('students')->find($id);
 
         return view('admin/kelas/edit', compact('data', 'kelas'));

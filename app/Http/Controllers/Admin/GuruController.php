@@ -19,6 +19,8 @@ class GuruController extends Controller
     public function index()
     {
         $data['pageInfo']['page'] = 'guru';
+        $jsonString = file_get_contents(base_path('configuration.json'));
+        $data['configuration'] = json_decode($jsonString, true);
         $gurus = Guru::with(['user', 'mapels'])->orderBy('created_at', 'desc')->orderBy('updated_at', 'desc')->paginate(10);
 
         return view('admin/guru/index', compact('data', 'gurus'));
@@ -32,6 +34,8 @@ class GuruController extends Controller
     public function create()
     {
         $data['pageInfo']['page'] = 'guru';
+        $jsonString = file_get_contents(base_path('configuration.json'));
+        $data['configuration'] = json_decode($jsonString, true);
         $mapels = Mapel::get();
 
         return view('admin/guru/create', compact('data', 'mapels'));
@@ -106,6 +110,8 @@ class GuruController extends Controller
     public function edit($id)
     {
         $data['pageInfo']['page'] = 'guru';
+        $jsonString = file_get_contents(base_path('configuration.json'));
+        $data['configuration'] = json_decode($jsonString, true);
         $mapels = Mapel::get();
         $guru = Guru::with(['user', 'mapels'])->find($id);
 

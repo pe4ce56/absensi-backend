@@ -4,10 +4,10 @@
         <!--Brand logo & name-->
         <!--================================-->
         <div class="navbar-header">
-            <a href="index.html" class="navbar-brand">
-                <img src="{{asset('assets/img/logo.png')}}" alt="Nifty Logo" class="brand-icon">
+            <a href="{{route('home')}}" class="navbar-brand">
+                <img src="{{ isset($data['configuration']['app-logo']) ? asset('app/'.$data['configuration']['app-logo']) : ''}}" alt="Nifty Logo" class="brand-icon">
                 <div class="brand-title">
-                    <span class="brand-text">Absensi</span>
+                    <span class="brand-text">{{ $data['configuration']['app-name'] ?? ''}}</span>
                 </div>
             </a>
         </div>

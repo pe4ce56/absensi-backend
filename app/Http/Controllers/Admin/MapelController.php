@@ -16,6 +16,8 @@ class MapelController extends Controller
     public function index()
     {
         $data['pageInfo']['page'] = 'mapel';
+        $jsonString = file_get_contents(base_path('configuration.json'));
+        $data['configuration'] = json_decode($jsonString, true);
         $mapels = Mapel::paginate(10);
         
         return view('admin/mapel/index', compact('data', 'mapels'));
@@ -29,6 +31,8 @@ class MapelController extends Controller
     public function create()
     {
         $data['pageInfo']['page'] = 'mapel';
+        $jsonString = file_get_contents(base_path('configuration.json'));
+        $data['configuration'] = json_decode($jsonString, true);
 
         return view('admin/mapel/create', compact('data'));
     }
@@ -72,6 +76,8 @@ class MapelController extends Controller
     public function edit($id)
     {
         $data['pageInfo']['page'] = 'mapel';
+        $jsonString = file_get_contents(base_path('configuration.json'));
+        $data['configuration'] = json_decode($jsonString, true);
         $mapel = Mapel::find($id);
 
         return view('admin/mapel/edit', compact('data', 'mapel'));

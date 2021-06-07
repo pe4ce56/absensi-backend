@@ -16,55 +16,42 @@
 @endsection
 @section('content')
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="panel panel-warning panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">
-                    <i class="demo-pli-file-word icon-3x"></i>
+                    <i class="ti-user"></i>
                 </div>
             </div>
             <div class="media-body">
-                <p class="text-2x mar-no text-semibold">241</p>
-                <p class="mar-no">Documents</p>
+                <p class="text-2x mar-no text-semibold">{{$data['teacher_count']}}</p>
+                <p class="mar-no">Guru</p>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="panel panel-info panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">
-                    <i class="demo-pli-file-zip icon-3x"></i>
+                    <i class="ti-user"></i>
                 </div>
             </div>
             <div class="media-body">
-                <p class="text-2x mar-no text-semibold">241</p>
-                <p class="mar-no">Zip Files</p>
+                <p class="text-2x mar-no text-semibold">{{$data['student_count']}}</p>
+                <p class="mar-no">Siswa</p>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="panel panel-mint panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">
-                    <i class="demo-pli-camera-2 icon-3x"></i>
+                    <i class="ti-direction"></i>
                 </div>
             </div>
             <div class="media-body">
-                <p class="text-2x mar-no text-semibold">241</p>
-                <p class="mar-no">Photos</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="panel panel-danger panel-colorful media middle pad-all">
-            <div class="media-left">
-                <div class="pad-hor">
-                    <i class="demo-pli-video icon-3x"></i>
-                </div>
-            </div>
-            <div class="media-body">
-                <p class="text-2x mar-no text-semibold">241</p>
-                <p class="mar-no">Videos</p>
+                <p class="text-2x mar-no text-semibold">{{$data['class_count']}}</p>
+                <p class="mar-no">Kelas</p>
             </div>
         </div>
     </div>
